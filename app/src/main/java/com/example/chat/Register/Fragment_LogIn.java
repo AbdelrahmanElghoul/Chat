@@ -1,111 +1,79 @@
 package com.example.chat.Register;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.chat.R;
+import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Fragment_LogIn.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Fragment_LogIn#newInstance} factory method to
- * create an instance of this fragment.
- */
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import timber.log.Timber;
+
+
 public class Fragment_LogIn extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @BindView(R.id.txt_create_new_account)
+    TextView txtNewAcc;
 
-    private OnFragmentInteractionListener mListener;
+    @BindView(R.id.log_in_email_txt)
+    TextView Email;
+    @BindView(R.id.log_in_password_txt)
+    TextView Password;
 
-    public Fragment_LogIn() {
-        // Required empty public constructor
-    }
+    @BindView(R.id.btn_log_in)
+    Button LogIn;
+    private FirebaseAuth firebaseAuth;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_LogIn.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Fragment_LogIn newInstance(String param1, String param2) {
-        Fragment_LogIn fragment = new Fragment_LogIn();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v=inflater.inflate(R.layout.fragment_log_in,container,false);
+        ButterKnife.bind(this,v);
+        firebaseAuth=firebaseAuth.getInstance();
+        return v;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        NavigateMainFrame navigateMainFrame=(NavigateMainFrame) getContext();
+        txtNewAcc.setOnClickListener(v->  navigateMainFrame.LoadFragment(new Fragment_Register()));
+
+        LogIn.setOnClickListener(v->LogIn());
+    }
+    boolean ValidateViews(){
+        boolean validate=true;
+        if(Email.getText().toString().isEmpty() || !MainActivity.isEmailValid(Email.getText().toString())) {
+            Email.setError(getString(R.string.wrong_email_format));
+            validate=false;
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__log_in, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        if(Password.getText().toString().isEmpty()){
+            Password.setError(getString(R.string.password_error_msg));
+            validate=false;
         }
+        return validate;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+    void LogIn(){
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        if(!ValidateViews()) return;
+        firebaseAuth.signInWithEmailAndPassword(Email.getText().toString(),Password.getText().toString())
+                .addOnSuccessListener(authResult-> MainActivity.currentUserID = firebaseAuth.getUid()
+                        )
+                .addOnFailureListener(e-> {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    Timber.e(e);}
+        );
     }
 }
