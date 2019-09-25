@@ -12,6 +12,26 @@
             android:orientation="vertical"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_width="100dp"
+                android:src="@drawable/avatar"
+                android:id="@+id/register_img"
+                android:scaleType="centerCrop"
+                android:layout_height="100dp"
+                android:layout_gravity="center" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/EditText_margin"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/register_name_txt"
+                    android:inputType="textEmailAddress"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_margin="@dimen/EditText_margin"
@@ -24,10 +44,10 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/email" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_margin="@dimen/EditText_margin"
+                android:id="@+id/register_password_txt_layout"
                 app:passwordToggleEnabled="true"
                 android:layout_height="wrap_content">
 

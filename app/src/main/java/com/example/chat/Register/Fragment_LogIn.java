@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.chat.R;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
@@ -26,9 +28,11 @@ public class Fragment_LogIn extends Fragment {
     TextView txtNewAcc;
 
     @BindView(R.id.log_in_email_txt)
-    TextView Email;
+    EditText Email;
     @BindView(R.id.log_in_password_txt)
-    TextView Password;
+    EditText Password;
+    @BindView(R.id.log_in_password_input_layout)
+    TextInputLayout PasswordLayout;
 
     @BindView(R.id.btn_log_in)
     Button LogIn;
@@ -59,12 +63,11 @@ public class Fragment_LogIn extends Fragment {
             validate=false;
         }
         if(Password.getText().toString().isEmpty()){
-            Password.setError(getString(R.string.password_error_msg));
+            PasswordLayout.setError(getString(R.string.password_error_msg));
             validate=false;
         }
         return validate;
     }
-
     void LogIn(){
 
         if(!ValidateViews()) return;
@@ -76,4 +79,5 @@ public class Fragment_LogIn extends Fragment {
                     Timber.e(e);}
         );
     }
+
 }

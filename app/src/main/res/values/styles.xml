@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="clickableText">
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@color/clickableText</item>
+    </style>
 </resources>
