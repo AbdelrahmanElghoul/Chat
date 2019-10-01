@@ -1,5 +1,6 @@
 package com.example.chat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -34,7 +35,8 @@ public class User {
     }
 
     public List<Friends> getFriends() {
-        return friends;
+
+        return friends==null ? new ArrayList<>():friends;
     }
 
     public void setFriends(List<Friends> friends) {

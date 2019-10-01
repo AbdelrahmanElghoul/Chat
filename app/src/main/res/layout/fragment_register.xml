@@ -7,21 +7,21 @@
     android:layout_margin="@dimen/layout_margin"
     tools:context=".Register.Fragment_Register">
 
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="100dp"
-                android:src="@drawable/avatar"
+                android:layout_width="150dp"
                 android:id="@+id/register_img"
                 android:scaleType="centerCrop"
-                android:layout_height="100dp"
+                android:src="@drawable/avatar"
+                android:layout_height="150dp"
                 android:layout_gravity="center" />
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/EditText_margin"
+                android:layout_margin="@dimen/view_margin"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -34,7 +34,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/EditText_margin"
+                android:layout_margin="@dimen/view_margin"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -46,7 +46,7 @@
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/EditText_margin"
+                android:layout_margin="@dimen/view_margin"
                 android:id="@+id/register_password_txt_layout"
                 app:passwordToggleEnabled="true"
                 android:layout_height="wrap_content">
@@ -70,10 +70,9 @@
                 style="@style/clickableText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/EditText_margin"
+                android:layout_margin="@dimen/view_margin"
                 android:text="@string/have_an_account" />
 
         </LinearLayout>
-
 
 </androidx.cardview.widget.CardView>

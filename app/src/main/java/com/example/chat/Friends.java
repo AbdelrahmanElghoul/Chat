@@ -3,12 +3,31 @@ package com.example.chat;
 public class Friends {
     private String ID;
     private String name;
+    private String profile;
     private String email;
     private String chat_ID;
     private boolean chat_update;
     private String friendState;
 
     public Friends() {
+    }
+
+    public void UpdateFriend(Friends friends) {
+        this.ID = friends.getID();
+        this.name = friends.getName();
+        this.profile = friends.getProfile();
+        this.email = friends.getEmail();
+        this.chat_ID = friends.getChat_ID();
+        this.chat_update = friends.isChat_update();
+        this.friendState = friends.getFriendState();
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     public String getID() {

@@ -16,7 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.chat.CircleTransform;
 import com.example.chat.R;
+import com.example.chat.openFriendsActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +44,6 @@ public class Fragment_Register extends Fragment {
     TextView txtLogIn;
     @BindView(R.id.register_email_txt)
     EditText Email;
-
     @BindView(R.id.register_password_txt_layout)
     TextInputLayout PasswordLayout;
     @BindView(R.id.register_password_txt)
@@ -55,7 +56,7 @@ public class Fragment_Register extends Fragment {
     EditText Name;
 
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference profileUserRef;
+        private DatabaseReference profileUserRef;
     private StorageReference storageReference;
     private Uri imgUri;
 
@@ -112,8 +113,11 @@ public class Fragment_Register extends Fragment {
         firebaseAuth.createUserWithEmailAndPassword(Email, Password)
                 .addOnSuccessListener(authResult -> {
                     MainActivity.currentUserID = firebaseAuth.getUid();
-                    addingToDatabase(Name.getText().toString());
+                    Timber.d(firebaseAuth.getUid());
+                    addingToDatabase(Email,Name.getText().toString());
                     UploadProfileImg();
+                    openFriendsActivity open = (openFriendsActivity) getContext();
+                    open.LogIn();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -122,28 +126,27 @@ public class Fragment_Register extends Fragment {
 
     }
 
-    private void addingToDatabase(String name) {
+    private void addingToDatabase(String Email,String name) {
 
-        profileUserRef = FirebaseDatabase.getInstance().getReference().child("users")
+        profileUserRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.User_KEY))
                 .child(MainActivity.currentUserID);
         HashMap user = new HashMap();
-        user.put("name", name);
+        user.put(getString(R.string.name), name);
+        user.put(getString(R.string.email),Email);
         profileUserRef.updateChildren(user).addOnFailureListener(e ->
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
-
-
     }
 
     private void UploadProfileImg() {
         if (imgUri == null) return;
 
-        final StorageReference filePath = storageReference.child(MainActivity.currentUserID + ".jpg");
+        final StorageReference filePath = storageReference.child(getString(R.string.profile_IMG)).child(MainActivity.currentUserID + ".jpg");
 
         filePath.putFile(imgUri)
                 .addOnSuccessListener(task ->
                         filePath.getDownloadUrl()
                                 .addOnSuccessListener(uri ->
-                                        profileUserRef.child("profileIMG").setValue(uri.toString())
+                                        profileUserRef.child(getString(R.string.profile_IMG)).setValue(uri.toString())
                                                 .addOnFailureListener(e ->
                                                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show())
                                 ).addOnFailureListener(e ->
@@ -159,6 +162,7 @@ public class Fragment_Register extends Fragment {
 
             Picasso.get().load(imgUri)
                     .error(R.drawable.avatar)
+                    .transform(new CircleTransform())
                     .into(img, new Callback() {
                         @Override
                         public void onSuccess() {

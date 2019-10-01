@@ -1,17 +1,21 @@
 package com.example.chat.Register;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.chat.R;
+import com.example.chat.Rooms.RoomsActivity;
+import com.example.chat.openFriendsActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements NavigateMainFrame {
+public class MainActivity extends AppCompatActivity implements NavigateMainFrame , openFriendsActivity {
 
     public static String currentUserID;
 
@@ -21,8 +25,13 @@ public class MainActivity extends AppCompatActivity implements NavigateMainFrame
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
-
-        LoadFragment(new Fragment_LogIn());
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if(FirebaseAuth.getInstance().getUid()!= null){
+            currentUserID=FirebaseAuth.getInstance().getUid();
+            LogIn();
+        }
+        else
+            LoadFragment(new Fragment_LogIn());
     }
 
     @Override
@@ -33,5 +42,11 @@ public class MainActivity extends AppCompatActivity implements NavigateMainFrame
 
     static boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher( email ).matches();
+    }
+
+    @Override
+    public void LogIn() {
+        Intent intent=new Intent(this, RoomsActivity.class);
+        startActivity(intent);
     }
 }
