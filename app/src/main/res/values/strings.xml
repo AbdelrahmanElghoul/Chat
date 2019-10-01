@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">chat</string>
-    <string name="email">Email</string>
+
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
     <string name="register">Register</string>
@@ -11,5 +11,33 @@
     <string name="Empty_field_msg">empty field</string>
     <string name="default_Error_msg">something went wrong please try again later</string>
     <string name="logIn_Error_msg">Invalid Email/Password</string>
-    <string name="name">Name</string>
+
+    <string name="search">Search by email</string>
+    <!-- Firebase RealTime Keys-->
+    <string name="User_KEY">user</string>
+    <string name="email">email</string>
+    <string name="name">name</string>
+    <!--User-->
+    <string name="Friends_KEY">Friends</string>
+    <string name="profile_IMG">profile</string>
+
+    <!--Messages-->
+    <string name="Messages_KEY">message</string>
+    <string name="sender">sender</string>
+    <string name="TimeStamp">timeStamp</string>
+
+    <!--Friend-->
+    <string name="friendState">friendState</string>
+
+    <!--Friends State-->
+    <string name="friend">friend</string>
+    <string name="removed_Friend">removed</string>
+    <string name="pendingRequest">pending</string>
+    <string name="RequestSent">sent</string>
+
+    <string name="MSG_isFriend">Already a Friend</string>
+    <string name="MSG_pendingRequest">Pending Request</string>
+    <string name="MSG_Request_Sent">Request Sent</string>
+    <string name="MSG_NoUseR">no user found with this email</string>
+
 </resources>

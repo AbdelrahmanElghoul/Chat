@@ -9,7 +9,9 @@ public class User {
     private String profile;
     private List<Friends> friends;
 
-    public User(){}
+    public User(){
+        friends=new ArrayList<>();
+    }
     public String getName() {
         return name;
     }
@@ -35,10 +37,11 @@ public class User {
     }
 
     public List<Friends> getFriends() {
-
-        return friends==null ? new ArrayList<>():friends;
+        return friends;
     }
-
+    public void AddFriend(Friends friend){
+        friends.add(friend);
+    }
     public void setFriends(List<Friends> friends) {
         this.friends = friends;
     }
