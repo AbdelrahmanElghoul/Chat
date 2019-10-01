@@ -2,6 +2,7 @@ package com.example.chat.Rooms;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,7 +34,8 @@ public class RoomsActivity extends AppCompatActivity {
     ViewPager pages;
     @BindView(R.id.img_exit)
     ImageButton btn_logout;
-
+    @BindView(R.id.txt_app_bar)
+    TextView AppBar;
     FriendsViewModel viewModel;
 
 
@@ -48,6 +50,7 @@ public class RoomsActivity extends AppCompatActivity {
         adapter.addList(new FriendsFragment(), "add");
 
         viewModel = ViewModelProviders.of(this).get(FriendsViewModel.class);
+
 
         btn_logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
@@ -71,18 +74,9 @@ public class RoomsActivity extends AppCompatActivity {
                                 user.setEmail(dataSnapshot.child(getString(R.string.email)).getValue(String.class));
                             if (dataSnapshot.hasChild(getString(R.string.profile_IMG)))
                                 user.setProfilePic(dataSnapshot.child(getString(R.string.profile_IMG)).getValue(String.class));
-
-                            /*if (dataSnapshot.hasChild(getString(R.string.Friends_KEY))) {
-                                List<Friends> friends = new ArrayList<>();
-                                for (DataSnapshot d : dataSnapshot.child(getString(R.string.Friends_KEY)).getChildren()) {
-                                    Friends tmp = d.getValue(Friends.class);
-                                    tmp.setID(d.getKey());
-                                    friends.add(tmp);
-                                }
-                                user.setFriends(friends);
-                            }*/
                             viewModel.setUser(user);
 
+                            AppBar.setText(viewModel.getUser().getName());
                             pages.setAdapter(adapter);
                             tabs.setupWithViewPager(pages);
                         }

@@ -3,7 +3,8 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/friends_layout"
-    android:padding="@dimen/layout_margin"
+    android:layout_margin="@dimen/view_margin"
+
     >
     <ImageView
         style="@style/profile"
@@ -21,14 +22,4 @@
         android:layout_weight="1"
         android:layout_gravity="center"/>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/accept_request"
-        android:src="@drawable/add_friend"/>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:src="@drawable/close"
-        android:id="@+id/cancel_request"
-        android:layout_height="wrap_content"/>
 </LinearLayout>

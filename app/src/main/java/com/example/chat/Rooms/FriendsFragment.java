@@ -74,13 +74,12 @@ public class FriendsFragment extends Fragment {
         friendsAdapter = new FriendsAdapter(getContext(), friendsList);
 
         requestsRecyclerView.setHasFixedSize(true);
-        friendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        friendsRecyclerView.setAdapter(requestAdapter);
+        requestsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        requestsRecyclerView.setAdapter(requestAdapter);
 
         friendsRecyclerView.setHasFixedSize(true);
         friendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         friendsRecyclerView.setAdapter(friendsAdapter);
-
 
         viewModel.getFriendsListener().observe(this, dataSnapshot -> {
             boolean found = false;
@@ -89,12 +88,19 @@ public class FriendsFragment extends Fragment {
 
                 for (int i = 0; i < viewModel.getUser().getFriends().size(); i++) {
                     Timber.e(String.valueOf(dataSnapshot));
-
                     if (viewModel.getUser().getFriends().get(i).getID().equals(Key)) {
-                        requestList.remove(viewModel.getUser().getFriends().get(i));
                         Friends f=dataSnapshot.getValue(Friends.class);
                         f.setID(Key);
+                        requestList.remove(viewModel.getUser().getFriends().get(i));
+                        friendsList.remove(viewModel.getUser().getFriends().get(i));
+                        if(getString(R.string.pendingRequest)
+                                .equals(dataSnapshot.child(getString(R.string.friendState)).getValue(String.class)))
+                        {
+                            requestList.add(f);
+                        }
                         viewModel.getUser().getFriends().get(i).UpdateFriend(f);
+                        if(f.getFriendState().equals(getString(R.string.friend)))
+                            friendsList.add(f);
                         found = true;
                         break;
                     }
@@ -106,12 +112,12 @@ public class FriendsFragment extends Fragment {
                 viewModel.getUser().AddFriend(f);
                 if(f.getFriendState().equals(getString(R.string.pendingRequest)))
                     requestList.add(f);
+                else if(f.getFriendState().equals(getString(R.string.friend)))
+                    friendsList.add(f);
             }
             requestAdapter.notifyDataSetChanged();
             friendsAdapter.notifyDataSetChanged();
         });
-
-
     }
 
     private void AddFriendBtn(String Email) {

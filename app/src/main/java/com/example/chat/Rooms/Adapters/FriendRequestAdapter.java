@@ -41,7 +41,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     @NonNull
     @Override
     public FriendRequestVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.friend_layout, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.request_layout, parent, false);
         return new FriendRequestVH(v);
     }
 
@@ -58,7 +58,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                     @Override
                     public void onError(Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                        Timber.d(e);
+                        Timber.e(e);
                     }
                 });
 
@@ -77,7 +77,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         });
     }
 
-    void Request(String Id1, String Id2, String state) {
+    private void Request(String Id1, String Id2, String state) {
         DatabaseReference userRef = FirebaseDatabase
                 .getInstance()
                 .getReference()

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,26 +42,24 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
     @Override
     public void onBindViewHolder(@NonNull FriendsVH holder, int position) {
+
         Picasso.get().load(friendsList.get(position).getProfile())
                 .error(R.drawable.avatar)
                 .transform(new CircleTransform())
                 .into(holder.friend_avatar, new Callback() {
                     @Override
                     public void onSuccess() {
+                        Toast.makeText(context, friendsList.get(position).getName(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                        Timber.d(e);
+                        Timber.e(e);
                     }
                 });
 
         holder.friend_name.setText(friendsList.get(position).getName());
-
-        holder.accept_request.setVisibility(View.GONE);
-
-        holder.cancel_request.setVisibility(View.GONE);
     }
 
     @Override
@@ -75,10 +72,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         ImageView friend_avatar;
         @BindView(R.id.txt_name)
         TextView friend_name;
-        @BindView(R.id.accept_request)
-        ImageButton accept_request;
-        @BindView(R.id.cancel_request)
-        ImageButton cancel_request;
 
         FriendsVH(@NonNull View itemView) {
             super(itemView);
