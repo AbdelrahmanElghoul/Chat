@@ -85,36 +85,32 @@ public class FriendsFragment extends Fragment {
             boolean found = false;
             String Key = dataSnapshot.getKey();
             Timber.d(Key);
+            Timber.e(String.valueOf(dataSnapshot));
+            Friends f = dataSnapshot.getValue(Friends.class);
+            f.setID(Key);
 
-                for (int i = 0; i < viewModel.getUser().getFriends().size(); i++) {
-                    Timber.e(String.valueOf(dataSnapshot));
-                    if (viewModel.getUser().getFriends().get(i).getID().equals(Key)) {
-                        Friends f=dataSnapshot.getValue(Friends.class);
-                        f.setID(Key);
-                        requestList.remove(viewModel.getUser().getFriends().get(i));
-                        friendsList.remove(viewModel.getUser().getFriends().get(i));
-                        if(getString(R.string.pendingRequest)
-                                .equals(dataSnapshot.child(getString(R.string.friendState)).getValue(String.class)))
-                        {
-                            requestList.add(f);
-                        }
-                        viewModel.getUser().getFriends().get(i).UpdateFriend(f);
-                        if(f.getFriendState().equals(getString(R.string.friend)))
-                            friendsList.add(f);
-                        found = true;
-                        break;
-                    }
+            Toast.makeText(getContext(), String.valueOf(viewModel.getUser().getFriends().contains(f.getID())), Toast.LENGTH_SHORT).show();
+            for (int i = 0; i < viewModel.getUser().getFriends().size(); i++) {
+                if (viewModel.getUser().getFriends().get(i).getID().equals(Key)) {
+                    if (i < friendsList.size() && friendsList.get(i).getID().equals(Key))
+                        friendsList.remove(i);
+                    if (i < requestList.size() && requestList.get(i).getID().equals(Key))
+                        requestList.remove(i);
+
+                    viewModel.getUser().getFriends().get(i).UpdateFriend(f);
+                    found = true;
+                    break;
                 }
-
-            if (!found) {
-                Friends f = dataSnapshot.getValue(Friends.class);
-                f.setID(Key);
-                viewModel.getUser().AddFriend(f);
-                if(f.getFriendState().equals(getString(R.string.pendingRequest)))
-                    requestList.add(f);
-                else if(f.getFriendState().equals(getString(R.string.friend)))
-                    friendsList.add(f);
             }
+
+            if (!found)
+                viewModel.getUser().AddFriend(f);
+
+            if (f.getFriendState().equals(getString(R.string.pendingRequest)))
+                requestList.add(f);
+            else if (f.getFriendState().equals(getString(R.string.friend)))
+                friendsList.add(f);
+
             requestAdapter.notifyDataSetChanged();
             friendsAdapter.notifyDataSetChanged();
         });

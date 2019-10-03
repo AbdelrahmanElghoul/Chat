@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".Rooms.RoomsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.HideActionBar"/>
         <activity android:name=".Register.MainActivity">
             <intent-filter>

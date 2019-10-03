@@ -44,16 +44,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     public void onBindViewHolder(@NonNull FriendsVH holder, int position) {
 
         Picasso.get().load(friendsList.get(position).getProfile())
-                .error(R.drawable.avatar)
                 .transform(new CircleTransform())
                 .into(holder.friend_avatar, new Callback() {
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(context, friendsList.get(position).getName(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(Exception e) {
+                        holder.friend_avatar.setImageDrawable(context.getDrawable(R.drawable.avatar));
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                         Timber.e(e);
                     }

@@ -87,5 +87,10 @@ public class RoomsActivity extends AppCompatActivity {
                         }
                     });
 
+        else {
+            AppBar.setText(viewModel.getUser().getName());
+            pages.setAdapter(adapter);
+            tabs.setupWithViewPager(pages);
+        }
     }
 }

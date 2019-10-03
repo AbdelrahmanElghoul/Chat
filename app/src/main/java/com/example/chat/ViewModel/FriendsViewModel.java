@@ -43,4 +43,3 @@ public class FriendsViewModel extends AndroidViewModel {
     }
 
 }
-
