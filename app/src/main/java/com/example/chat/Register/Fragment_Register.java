@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chat.CircleTransform;
 import com.example.chat.R;
-import com.example.chat.openFriendsActivity;
+import com.example.chat.openRoomsActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -116,7 +116,7 @@ public class Fragment_Register extends Fragment {
                     Timber.d(firebaseAuth.getUid());
                     addingToDatabase(Email,Name.getText().toString());
                     UploadProfileImg();
-                    openFriendsActivity open = (openFriendsActivity) getContext();
+                    openRoomsActivity open = (openRoomsActivity) getContext();
                     open.LogIn();
                 })
                 .addOnFailureListener(e -> {

@@ -66,14 +66,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
         holder.accept_request.setOnClickListener(v -> {
             Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
-            Request(requestList.get(position).getID(), MainActivity.currentUserID, context.getString(R.string.friend));
-            Request(MainActivity.currentUserID, requestList.get(position).getID(), context.getString(R.string.friend));
+            Request(requestList.get(position).getKey(), MainActivity.currentUserID, context.getString(R.string.friend));
+            Request(MainActivity.currentUserID, requestList.get(position).getKey(), context.getString(R.string.friend));
         });
 
         holder.cancel_request.setOnClickListener(v -> {
             Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
-            Request(requestList.get(position).getID(), MainActivity.currentUserID, context.getString(R.string.removed_Friend));
-            Request(MainActivity.currentUserID, requestList.get(position).getID(), context.getString(R.string.removed_Friend));
+            Request(requestList.get(position).getKey(), MainActivity.currentUserID, context.getString(R.string.removed_Friend));
+            Request(MainActivity.currentUserID, requestList.get(position).getKey(), context.getString(R.string.removed_Friend));
         });
     }
 

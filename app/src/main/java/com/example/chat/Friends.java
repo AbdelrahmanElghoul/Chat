@@ -1,7 +1,10 @@
 package com.example.chat;
 
-public class Friends {
-    private String ID;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Friends implements Parcelable {
+    private String Key;
     private String name;
     private String profile;
     private String email;
@@ -13,7 +16,7 @@ public class Friends {
     }
 
     public void UpdateFriend(Friends friends) {
-        this.ID = friends.getID();
+        this.Key = friends.getKey();
         this.name = friends.getName();
         this.profile = friends.getProfile();
         this.email = friends.getEmail();
@@ -30,12 +33,12 @@ public class Friends {
         this.profile = profile;
     }
 
-    public String getID() {
-        return ID;
+    public String getKey() {
+        return Key;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setKey(String key) {
+        this.Key = key;
     }
 
     public String getName() {
@@ -77,4 +80,42 @@ public class Friends {
     public void setFriendState(String friendState) {
         this.friendState = friendState;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.Key);
+        dest.writeString(this.name);
+        dest.writeString(this.profile);
+        dest.writeString(this.email);
+        dest.writeString(this.chat_ID);
+        dest.writeByte(this.chat_update ? (byte) 1 : (byte) 0);
+        dest.writeString(this.friendState);
+    }
+
+    protected Friends(Parcel in) {
+        this.Key = in.readString();
+        this.name = in.readString();
+        this.profile = in.readString();
+        this.email = in.readString();
+        this.chat_ID = in.readString();
+        this.chat_update = in.readByte() != 0;
+        this.friendState = in.readString();
+    }
+
+    public static final Parcelable.Creator<Friends> CREATOR = new Parcelable.Creator<Friends>() {
+        @Override
+        public Friends createFromParcel(Parcel source) {
+            return new Friends(source);
+        }
+
+        @Override
+        public Friends[] newArray(int size) {
+            return new Friends[size];
+        }
+    };
 }

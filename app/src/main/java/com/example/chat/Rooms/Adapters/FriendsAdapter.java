@@ -57,8 +57,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                         Timber.e(e);
                     }
                 });
-
         holder.friend_name.setText(friendsList.get(position).getName());
+        holder.layout.setOnClickListener(v -> {
+            Toast.makeText(context, friendsList.get(position).getEmail(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -71,6 +73,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         ImageView friend_avatar;
         @BindView(R.id.txt_name)
         TextView friend_name;
+        @BindView(R.id.friends_layout)
+        View layout;
 
         FriendsVH(@NonNull View itemView) {
             super(itemView);

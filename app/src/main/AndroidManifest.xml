@@ -11,9 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Rooms.RoomsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.HideActionBar"/>
+
+        <activity
+            android:name=".Rooms.RoomsActivity"
+            android:theme="@style/AppTheme.HideActionBar" />
+
         <activity android:name=".Register.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

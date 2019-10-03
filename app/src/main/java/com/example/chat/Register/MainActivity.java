@@ -9,13 +9,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chat.R;
 import com.example.chat.Rooms.RoomsActivity;
-import com.example.chat.openFriendsActivity;
+import com.example.chat.openRoomsActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements NavigateMainFrame , openFriendsActivity {
+public class MainActivity extends AppCompatActivity implements NavigateMainFrame , openRoomsActivity {
 
     public static String currentUserID;
 
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigateMainFrame
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
-//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         if(FirebaseAuth.getInstance().getUid()!= null){
             currentUserID=FirebaseAuth.getInstance().getUid();
             LogIn();

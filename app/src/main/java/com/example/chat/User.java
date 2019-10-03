@@ -1,17 +1,14 @@
 package com.example.chat;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class User {
+public class User implements Parcelable {
     private String name;
     private String email;
     private String profile;
-    private List<Friends> friends;
 
-    public User(){
-        friends=new ArrayList<>();
-    }
+    public User(){};
     public String getName() {
         return name;
     }
@@ -36,17 +33,36 @@ public class User {
         this.profile = profilePic;
     }
 
-    public List<Friends> getFriends() {
-        return friends;
-    }
-    public void AddFriend(Friends friend){
-        friends.add(friend);
-    }
-    public void setFriends(List<Friends> friends) {
-        this.friends = friends;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.email);
+        dest.writeString(this.profile);
+    }
 
+    public User(Parcel in) {
+        this.name = in.readString();
+        this.email = in.readString();
+        this.profile = in.readString();
 
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }
 

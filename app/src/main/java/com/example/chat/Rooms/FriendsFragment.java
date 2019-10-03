@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +20,7 @@ import com.example.chat.Register.MainActivity;
 import com.example.chat.Rooms.Adapters.FriendRequestAdapter;
 import com.example.chat.Rooms.Adapters.FriendsAdapter;
 import com.example.chat.User;
-import com.example.chat.ViewModel.FriendsViewModel;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,7 +40,7 @@ import timber.log.Timber;
 public class FriendsFragment extends Fragment {
 
     private DatabaseReference userRef;
-    private FriendsViewModel viewModel;
+
     @BindView(R.id.btn_add_friend)
     ImageButton btn_add;
     @BindView(R.id.txt_search)
@@ -51,23 +50,28 @@ public class FriendsFragment extends Fragment {
     @BindView(R.id.friends_request)
     RecyclerView requestsRecyclerView;
 
+    private User user;
     private List<Friends> requestList = new ArrayList<>();
     private List<Friends> friendsList = new ArrayList<>();
     private FriendRequestAdapter requestAdapter;
     private FriendsAdapter friendsAdapter;
+    private DatabaseReference friendsRef;
+    private ChildEventListener friendsChildListener;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_friend, container, false);
         ButterKnife.bind(this, v);
+        assert getArguments() != null;
+        user=getArguments().getParcelable(getString(R.string.User_KEY));
         return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = ViewModelProviders.of(getActivity()).get(FriendsViewModel.class);
+
         btn_add.setOnClickListener(v -> AddFriendBtn(txt_Search.getText().toString()));
 
         requestAdapter = new FriendRequestAdapter(getContext(), requestList);
@@ -81,50 +85,84 @@ public class FriendsFragment extends Fragment {
         friendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         friendsRecyclerView.setAdapter(friendsAdapter);
 
-        viewModel.getFriendsListener().observe(this, dataSnapshot -> {
-            boolean found = false;
-            String Key = dataSnapshot.getKey();
-            Timber.d(Key);
-            Timber.e(String.valueOf(dataSnapshot));
-            Friends f = dataSnapshot.getValue(Friends.class);
-            f.setID(Key);
+        friendsChildListener=new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Timber.tag("AddedData").d(String.valueOf(dataSnapshot));
+                Timber.tag("AddedS").d(dataSnapshot.getKey());
 
-            Toast.makeText(getContext(), String.valueOf(viewModel.getUser().getFriends().contains(f.getID())), Toast.LENGTH_SHORT).show();
-            for (int i = 0; i < viewModel.getUser().getFriends().size(); i++) {
-                if (viewModel.getUser().getFriends().get(i).getID().equals(Key)) {
-                    if (i < friendsList.size() && friendsList.get(i).getID().equals(Key))
-                        friendsList.remove(i);
-                    if (i < requestList.size() && requestList.get(i).getID().equals(Key))
-                        requestList.remove(i);
+                Friends tmp=dataSnapshot.getValue(Friends.class);
+                tmp.setKey(dataSnapshot.getKey());
 
-                    viewModel.getUser().getFriends().get(i).UpdateFriend(f);
-                    found = true;
-                    break;
+                if(tmp.getFriendState().equals(getString(R.string.friend))) {
+                    friendsList.add(tmp);
+                    friendsAdapter.notifyDataSetChanged();
+                }
+                else if(tmp.getFriendState().equals(getString(R.string.pendingRequest))) {
+                    requestList.add(tmp);
+                    requestAdapter.notifyDataSetChanged();
                 }
             }
 
-            if (!found)
-                viewModel.getUser().AddFriend(f);
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Timber.d(String.valueOf(dataSnapshot));
+                Timber.d(s);
+                Friends tmp=dataSnapshot.getValue(Friends.class);
+                tmp.setKey(dataSnapshot.getKey());
+                if(tmp.getFriendState().equals(getString(R.string.pendingRequest))){
+                    requestList.add(tmp);
+                    requestAdapter.notifyDataSetChanged();
+                }
+                else if(tmp.getFriendState().equals(getString(R.string.friend))){
+                    for(int i=0;i<requestList.size();i++){
+                        if(requestList.get(i).getKey().equals(tmp.getKey())){
+                            requestList.remove(i);
+                        break;
+                        }
+                    }
+                    friendsList.add(tmp);
+                    requestAdapter.notifyDataSetChanged();
+                    friendsAdapter.notifyDataSetChanged();
+                }
+            }
 
-            if (f.getFriendState().equals(getString(R.string.pendingRequest)))
-                requestList.add(f);
-            else if (f.getFriendState().equals(getString(R.string.friend)))
-                friendsList.add(f);
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-            requestAdapter.notifyDataSetChanged();
-            friendsAdapter.notifyDataSetChanged();
-        });
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        friendsRef=FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(getString(R.string.User_KEY))
+                .child(MainActivity.currentUserID)
+                .child(getString(R.string.Friends_KEY));
+
+        friendsRef.addChildEventListener(friendsChildListener);
+
     }
 
     private void AddFriendBtn(String Email) {
-        if (Email.isEmpty() || Email.equals(viewModel.getUser().getEmail()))
+        if (Email.isEmpty() || Email.equals(user.getEmail()))
             return;
 //        Timber.d(Email);
 
-        if (viewModel.getUser().getFriends() == null || viewModel.getUser().getFriends().size() == 0)
+        if (friendsList == null || friendsList.size() == 0)
             GetUserID(Email);
         else {
-            for (Friends friends : viewModel.getUser().getFriends()) {
+            for (Friends friends : friendsList) {
                 if (friends.getEmail().equals(Email)) {
                     if (getString(R.string.friend).equals(friends.getFriendState())) {
                         Toast.makeText(getContext(), getString(R.string.MSG_isFriend), Toast.LENGTH_SHORT).show();
@@ -134,7 +172,7 @@ public class FriendsFragment extends Fragment {
                         Toast.makeText(getContext(), getString(R.string.MSG_Request_Sent), Toast.LENGTH_SHORT).show();
                     }
                     else if (getString(R.string.removed_Friend).equals(friends.getFriendState())) {
-                        AddFriendReceiver(viewModel.getUser(), friends);
+                        AddFriendReceiver(user, friends);
                         AddFriendSender(friends);
                     } else {
                         GetUserID(Email);
@@ -159,13 +197,13 @@ public class FriendsFragment extends Fragment {
                 Friends Receive = null;
                 for (DataSnapshot d : dataSnapshot.getChildren()) {
                     Receive = d.getValue(Friends.class);
-                    Receive.setID(d.getKey());
+                    Receive.setKey(d.getKey());
                 }
                 if (Receive == null) {
                     Toast.makeText(getContext(), getString(R.string.MSG_NoUseR), Toast.LENGTH_SHORT).show();
                 } else {
                     AddFriendSender(Receive);
-                    AddFriendReceiver(viewModel.getUser(), Receive);
+                    AddFriendReceiver(user, Receive);
                 }
             }
 
@@ -184,7 +222,7 @@ public class FriendsFragment extends Fragment {
                 .child(getString(R.string.User_KEY))
                 .child(MainActivity.currentUserID)
                 .child(getString(R.string.Friends_KEY))
-                .child(friend.getID())
+                .child(friend.getKey())
         ;
         HashMap data = new HashMap();
         data.put(getString(R.string.name), friend.getName());
@@ -202,7 +240,7 @@ public class FriendsFragment extends Fragment {
         userRef = FirebaseDatabase.getInstance()
                 .getReference()//db
                 .child(getString(R.string.User_KEY))//Users
-                .child(friend.getID())//User ID
+                .child(friend.getKey())//User ID
                 .child(getString(R.string.Friends_KEY))//Friends
                 .child(MainActivity.currentUserID)//friends ID
         ;
@@ -215,5 +253,11 @@ public class FriendsFragment extends Fragment {
         userRef.updateChildren(data).addOnFailureListener(e ->
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        friendsRef.removeEventListener(friendsChildListener);
     }
 }

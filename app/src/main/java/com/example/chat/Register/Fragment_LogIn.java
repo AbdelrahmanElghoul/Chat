@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.chat.R;
-import com.example.chat.openFriendsActivity;
+import com.example.chat.openRoomsActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -76,7 +76,7 @@ public class Fragment_LogIn extends Fragment {
         firebaseAuth.signInWithEmailAndPassword(Email.getText().toString(), Password.getText().toString())
                 .addOnSuccessListener(authResult -> {
                     MainActivity.currentUserID = firebaseAuth.getUid();
-                    openFriendsActivity open = (openFriendsActivity) getContext();
+                    openRoomsActivity open = (openRoomsActivity) getContext();
                     open.LogIn();
                         }
                 )

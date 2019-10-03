@@ -1,5 +1,5 @@
 package com.example.chat;
 
-public interface openFriendsActivity {
+public interface openRoomsActivity {
     void LogIn();
 }
