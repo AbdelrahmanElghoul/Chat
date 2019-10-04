@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.chat.CircleTransform;
 import com.example.chat.Friends;
 import com.example.chat.R;
+import com.example.chat.Rooms.OpenChatFragment;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -25,12 +26,14 @@ import timber.log.Timber;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsVH> {
 
+    OpenChatFragment chatFragment;
     private Context context;
     private List<Friends> friendsList;
 
     public FriendsAdapter(Context context, List<Friends> friendsList) {
         this.context = context;
         this.friendsList = friendsList;
+        chatFragment=(OpenChatFragment) context;
     }
 
     @NonNull
@@ -59,7 +62,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 });
         holder.friend_name.setText(friendsList.get(position).getName());
         holder.layout.setOnClickListener(v -> {
-            Toast.makeText(context, friendsList.get(position).getEmail(), Toast.LENGTH_SHORT).show();
+            chatFragment.openFragment(friendsList.get(position));
+
         });
     }
 

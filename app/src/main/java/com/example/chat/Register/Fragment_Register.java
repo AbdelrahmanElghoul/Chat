@@ -74,7 +74,7 @@ public class Fragment_Register extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        NavigateMainFrame navigateMainFrame = (NavigateMainFrame) getContext();
+        NavigateMainFrag navigateMainFrame = (NavigateMainFrag) getContext();
         txtLogIn.setOnClickListener(v -> navigateMainFrame.LoadFragment(new Fragment_LogIn()));
         Register.setOnClickListener(v -> btnRegister());
         img.setOnClickListener(v->{
@@ -88,7 +88,7 @@ public class Fragment_Register extends Fragment {
 
     private boolean ValidateViews() {
         boolean validate = true;
-        if (Email.getText().toString().isEmpty() || !MainActivity.isEmailValid(Email.getText().toString())) {
+        if (Email.getText().toString().isEmpty() || !AuthActivity.isEmailValid(Email.getText().toString())) {
             Email.setError(getString(R.string.wrong_email_format));
             validate = false;
         }
@@ -112,7 +112,7 @@ public class Fragment_Register extends Fragment {
 
         firebaseAuth.createUserWithEmailAndPassword(Email, Password)
                 .addOnSuccessListener(authResult -> {
-                    MainActivity.currentUserID = firebaseAuth.getUid();
+
                     Timber.d(firebaseAuth.getUid());
                     addingToDatabase(Email,Name.getText().toString());
                     UploadProfileImg();
@@ -129,7 +129,7 @@ public class Fragment_Register extends Fragment {
     private void addingToDatabase(String Email,String name) {
 
         profileUserRef = FirebaseDatabase.getInstance().getReference().child(getString(R.string.User_KEY))
-                .child(MainActivity.currentUserID);
+                .child(FirebaseAuth.getInstance().getUid());
         HashMap user = new HashMap();
         user.put(getString(R.string.name), name);
         user.put(getString(R.string.email),Email);
@@ -140,7 +140,7 @@ public class Fragment_Register extends Fragment {
     private void UploadProfileImg() {
         if (imgUri == null) return;
 
-        final StorageReference filePath = storageReference.child(getString(R.string.profile_IMG)).child(MainActivity.currentUserID + ".jpg");
+        final StorageReference filePath = storageReference.child(getString(R.string.profile_IMG)).child(FirebaseAuth.getInstance().getUid()+ ".jpg");
 
         filePath.putFile(imgUri)
                 .addOnSuccessListener(task ->

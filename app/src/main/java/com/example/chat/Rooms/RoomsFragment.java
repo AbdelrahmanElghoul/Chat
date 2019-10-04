@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,8 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.chat.CircleTransform;
 import com.example.chat.R;
-import com.example.chat.Register.MainActivity;
 import com.example.chat.Rooms.Adapters.ViewPagerAdapter;
 import com.example.chat.User;
 import com.google.android.material.tabs.TabLayout;
@@ -23,6 +24,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +43,9 @@ public class RoomsFragment extends Fragment {
     ImageButton btn_logout;
     @BindView(R.id.txt_app_bar)
     TextView AppBar;
-
+    @BindView(R.id.avatar)
+    ImageView avatar;
+    private User user ;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,7 +58,7 @@ public class RoomsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
 
         btn_logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
@@ -63,12 +68,12 @@ public class RoomsFragment extends Fragment {
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child(getString(R.string.User_KEY))
-                .child(MainActivity.currentUserID)
+                .child(FirebaseAuth.getInstance().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Timber.d(String.valueOf(dataSnapshot));
-                        User user = new User();
+                        user = new User();
 
                         if (dataSnapshot.hasChild(getString(R.string.name)))
                             user.setName(dataSnapshot.child(getString(R.string.name)).getValue(String.class));
@@ -86,6 +91,21 @@ public class RoomsFragment extends Fragment {
                         adapter.addList(friendsFragment, "add");
                         pages.setAdapter(adapter);
                         tabs.setupWithViewPager(pages);
+
+                        Picasso.get()
+                                .load(user.getProfilePic())
+                                .transform(new CircleTransform())
+                                .into(avatar, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        avatar.setImageResource(R.drawable.avatar);
+                                    }
+                                });
                     }
 
                     @Override

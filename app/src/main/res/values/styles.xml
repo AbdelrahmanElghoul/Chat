@@ -25,4 +25,5 @@
         <item name="android:layout_height">@dimen/profile_width_height</item>
         <item name="android:contentDescription">@string/profile_IMG</item>
     </style>
+
 </resources>

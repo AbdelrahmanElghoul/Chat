@@ -8,21 +8,11 @@ public class Friends implements Parcelable {
     private String name;
     private String profile;
     private String email;
-    private String chat_ID;
+    private String sessionID;
     private boolean chat_update;
     private String friendState;
 
     public Friends() {
-    }
-
-    public void UpdateFriend(Friends friends) {
-        this.Key = friends.getKey();
-        this.name = friends.getName();
-        this.profile = friends.getProfile();
-        this.email = friends.getEmail();
-        this.chat_ID = friends.getChat_ID();
-        this.chat_update = friends.isChat_update();
-        this.friendState = friends.getFriendState();
     }
 
     public String getProfile() {
@@ -49,12 +39,12 @@ public class Friends implements Parcelable {
         this.name = name;
     }
 
-    public String getChat_ID() {
-        return chat_ID;
+    public String getSessionID() {
+        return sessionID;
     }
 
-    public void setChat_ID(String chat_ID) {
-        this.chat_ID = chat_ID;
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
     }
 
     public boolean isChat_update() {
@@ -92,7 +82,7 @@ public class Friends implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.profile);
         dest.writeString(this.email);
-        dest.writeString(this.chat_ID);
+        dest.writeString(this.sessionID);
         dest.writeByte(this.chat_update ? (byte) 1 : (byte) 0);
         dest.writeString(this.friendState);
     }
@@ -102,7 +92,7 @@ public class Friends implements Parcelable {
         this.name = in.readString();
         this.profile = in.readString();
         this.email = in.readString();
-        this.chat_ID = in.readString();
+        this.sessionID = in.readString();
         this.chat_update = in.readByte() != 0;
         this.friendState = in.readString();
     }

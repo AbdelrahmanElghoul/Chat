@@ -51,7 +51,7 @@ public class Fragment_LogIn extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        NavigateMainFrame navigateMainFrame = (NavigateMainFrame) getContext();
+        NavigateMainFrag navigateMainFrame = (NavigateMainFrag) getContext();
         txtNewAcc.setOnClickListener(v -> navigateMainFrame.LoadFragment(new Fragment_Register()));
 
         LogIn.setOnClickListener(v -> LogIn());
@@ -59,7 +59,7 @@ public class Fragment_LogIn extends Fragment {
 
     boolean ValidateViews() {
         boolean validate = true;
-        if (Email.getText().toString().isEmpty() || !MainActivity.isEmailValid(Email.getText().toString())) {
+        if (Email.getText().toString().isEmpty() || !AuthActivity.isEmailValid(Email.getText().toString())) {
             Email.setError(getString(R.string.wrong_email_format));
             validate = false;
         }
@@ -75,7 +75,6 @@ public class Fragment_LogIn extends Fragment {
         if (!ValidateViews()) return;
         firebaseAuth.signInWithEmailAndPassword(Email.getText().toString(), Password.getText().toString())
                 .addOnSuccessListener(authResult -> {
-                    MainActivity.currentUserID = firebaseAuth.getUid();
                     openRoomsActivity open = (openRoomsActivity) getContext();
                     open.LogIn();
                         }

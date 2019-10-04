@@ -14,13 +14,21 @@
 
         <activity
             android:name=".Rooms.RoomsActivity"
-            android:theme="@style/AppTheme.HideActionBar" />
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:theme="@style/AppTheme.HideActionBar" >
 
-        <activity android:name=".Register.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".Register.AuthActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

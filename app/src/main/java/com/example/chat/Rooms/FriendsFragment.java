@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chat.Friends;
 import com.example.chat.R;
-import com.example.chat.Register.MainActivity;
 import com.example.chat.Rooms.Adapters.FriendRequestAdapter;
 import com.example.chat.Rooms.Adapters.FriendsAdapter;
 import com.example.chat.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,8 +51,8 @@ public class FriendsFragment extends Fragment {
     RecyclerView requestsRecyclerView;
 
     private User user;
-    private List<Friends> requestList = new ArrayList<>();
-    private List<Friends> friendsList = new ArrayList<>();
+    private List<Friends> requestList;
+    private List<Friends> friendsList;
     private FriendRequestAdapter requestAdapter;
     private FriendsAdapter friendsAdapter;
     private DatabaseReference friendsRef;
@@ -65,6 +65,8 @@ public class FriendsFragment extends Fragment {
         ButterKnife.bind(this, v);
         assert getArguments() != null;
         user=getArguments().getParcelable(getString(R.string.User_KEY));
+        friendsList = new ArrayList<>();
+        requestList = new ArrayList<>();
         return v;
     }
 
@@ -147,7 +149,7 @@ public class FriendsFragment extends Fragment {
                 .getInstance()
                 .getReference()
                 .child(getString(R.string.User_KEY))
-                .child(MainActivity.currentUserID)
+                .child(FirebaseAuth.getInstance().getUid())
                 .child(getString(R.string.Friends_KEY));
 
         friendsRef.addChildEventListener(friendsChildListener);
@@ -155,41 +157,47 @@ public class FriendsFragment extends Fragment {
     }
 
     private void AddFriendBtn(String Email) {
+        Timber.d("Add btn");
         if (Email.isEmpty() || Email.equals(user.getEmail()))
             return;
-//        Timber.d(Email);
 
         if (friendsList == null || friendsList.size() == 0)
             GetUserID(Email);
         else {
+            boolean found=false;
             for (Friends friends : friendsList) {
                 if (friends.getEmail().equals(Email)) {
                     if (getString(R.string.friend).equals(friends.getFriendState())) {
                         Toast.makeText(getContext(), getString(R.string.MSG_isFriend), Toast.LENGTH_SHORT).show();
                     } else if (getString(R.string.pendingRequest).equals(friends.getFriendState())) {
                         Toast.makeText(getContext(), getString(R.string.MSG_pendingRequest), Toast.LENGTH_SHORT).show();
+
                     }else if(getString(R.string.RequestSent).equals(friends.getFriendState())) {
                         Toast.makeText(getContext(), getString(R.string.MSG_Request_Sent), Toast.LENGTH_SHORT).show();
                     }
-                    else if (getString(R.string.removed_Friend).equals(friends.getFriendState())) {
+                    else{
                         AddFriendReceiver(user, friends);
                         AddFriendSender(friends);
-                    } else {
-                        GetUserID(Email);
                     }
+                    found=true;
                     break;
                 }
+
             }
+            if(!found)
+              GetUserID(Email);
         }
     }
 
     private void GetUserID(String Email) {
+
         Query ReceiverQuery = FirebaseDatabase.getInstance()
                 .getReference()
                 .child(getString(R.string.User_KEY))
                 .orderByChild(getString(R.string.email))
                 .equalTo(Email);
 
+        Timber.d("Searching");
         ReceiverQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -220,7 +228,7 @@ public class FriendsFragment extends Fragment {
         userRef = FirebaseDatabase.getInstance()
                 .getReference()
                 .child(getString(R.string.User_KEY))
-                .child(MainActivity.currentUserID)
+                .child(FirebaseAuth.getInstance().getUid())
                 .child(getString(R.string.Friends_KEY))
                 .child(friend.getKey())
         ;
@@ -242,7 +250,7 @@ public class FriendsFragment extends Fragment {
                 .child(getString(R.string.User_KEY))//Users
                 .child(friend.getKey())//User ID
                 .child(getString(R.string.Friends_KEY))//Friends
-                .child(MainActivity.currentUserID)//friends ID
+                .child(FirebaseAuth.getInstance().getUid())//friends ID
         ;
         HashMap data = new HashMap();
         Timber.d(String.valueOf(user.getProfilePic()));
@@ -259,5 +267,6 @@ public class FriendsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         friendsRef.removeEventListener(friendsChildListener);
+        Timber.d("Listener removed");
     }
 }

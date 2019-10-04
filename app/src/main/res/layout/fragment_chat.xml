@@ -1,14 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_scrollFlags="snap"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Rooms.ChatFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/toolbar_container"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary">
 
-</FrameLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentInsetStart="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_margin="@dimen/view_margin"
+                android:layout_height="?actionBarSize">
+
+                <ImageButton
+                    android:layout_width="40dp"
+
+                    android:src="@drawable/back"
+                    android:id="@+id/btn_back"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    android:layout_height="40dp"/>
+                <ImageView
+                    android:layout_width="@dimen/profile_width_height"
+                    android:layout_height="@dimen/profile_width_height"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/avatar"
+                    android:id="@+id/avatar"
+                    android:layout_margin="@dimen/view_margin"
+                    android:contentDescription="@string/app_name" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:gravity="center_vertical|start"
+                    android:id="@+id/txt_app_bar"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/actionBarTxt"
+                    android:text="@string/app_name"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:background="#fff"
+    android:id="@+id/recycler_chat"
+    android:layout_weight="1"
+    android:clipToPadding="true"
+/>
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_margin"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:orientation="horizontal">
+
+         <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/txt_chat"
+        android:hint="@string/type_message"
+       />
+
+         <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/send"
+        android:background="@null"
+        android:id="@+id/btn_send"
+        android:padding="@dimen/view_margin"
+        android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>

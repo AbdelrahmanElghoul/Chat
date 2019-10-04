@@ -16,19 +16,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements NavigateMainFrame , openRoomsActivity {
+public class AuthActivity extends AppCompatActivity implements NavigateMainFrag, openRoomsActivity {
 
-    public static String currentUserID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         if(FirebaseAuth.getInstance().getUid()!= null){
-            currentUserID=FirebaseAuth.getInstance().getUid();
             LogIn();
         }
         else
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigateMainFrame
     @Override
     public void LogIn() {
         Intent intent=new Intent(this, RoomsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }
