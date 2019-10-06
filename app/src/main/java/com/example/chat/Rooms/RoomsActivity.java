@@ -9,42 +9,62 @@ import com.example.chat.Friends;
 import com.example.chat.R;
 import com.example.chat.Register.AuthActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class RoomsActivity extends AppCompatActivity implements OpenChatFragment{
+
+
+    private static final String CHAT_TAG=ChatFragment.class.getSimpleName();
+    private static final String ROOM_TAG=RoomsFragment.class.getSimpleName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rooms);
+        ButterKnife.bind(this);
+        Timber.plant(new Timber.DebugTree());
+        Firebase.setPersisstace();
 
         if(FirebaseAuth.getInstance().getUid()==null)
             startActivity(new Intent(this, AuthActivity.class));
-        else
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.rooms_frame,new RoomsFragment())
-                    .commit();
+
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onStart() {
+        super.onStart();
+        Timber.tag("Start").e(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.rooms_frame,new RoomsFragment())
-                .commit();
+        if(getSupportFragmentManager().getBackStackEntryCount()>0){
+           boolean chatFrag=getSupportFragmentManager().popBackStackImmediate(CHAT_TAG,0);
+//           if(!chatFrag)
+//               getSupportFragmentManager().popBackStackImmediate(ROOM_TAG,0);
+            Timber.e("if");
+        }
+        else{
+
+            Timber.e("Else");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.rooms_frame,new RoomsFragment())
+                    .addToBackStack(ROOM_TAG)
+                    .commit();}
 
     }
 
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount()>0)
-            getSupportFragmentManager().popBackStackImmediate();
-        else
-            super.onBackPressed();
-
+        Timber.tag("Back").e(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
+        boolean RoomsFrag=false;
+        if(getSupportFragmentManager().getBackStackEntryCount()>0) {
+            RoomsFrag = getSupportFragmentManager().popBackStackImmediate(ROOM_TAG, 0);
+        }
+        if(!RoomsFrag)
+            finishAffinity();
     }
 
     @Override
@@ -58,7 +78,20 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.rooms_frame,chatFragment)
-                .addToBackStack(null)
+                .addToBackStack(CHAT_TAG)
                 .commit();
+    }
+
+
+}
+
+class Firebase{
+
+    private static boolean persistence =false;
+    static void setPersisstace() {
+        if(!persistence){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            persistence =true;
+        }
     }
 }

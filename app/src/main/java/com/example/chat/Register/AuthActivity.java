@@ -11,10 +11,8 @@ import com.example.chat.R;
 import com.example.chat.Rooms.RoomsActivity;
 import com.example.chat.openRoomsActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class AuthActivity extends AppCompatActivity implements NavigateMainFrag, openRoomsActivity {
 
@@ -25,13 +23,13 @@ public class AuthActivity extends AppCompatActivity implements NavigateMainFrag,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
-        Timber.plant(new Timber.DebugTree());
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         if(FirebaseAuth.getInstance().getUid()!= null){
             LogIn();
         }
         else
             LoadFragment(new Fragment_LogIn());
+
     }
 
     @Override

@@ -65,6 +65,7 @@ public class RoomsFragment extends Fragment {
             getActivity().finishAffinity();
         });
 
+
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child(getString(R.string.User_KEY))
@@ -115,5 +116,4 @@ public class RoomsFragment extends Fragment {
                 });
 
     }
-
 }

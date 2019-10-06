@@ -23,7 +23,7 @@
                     android:id="@+id/log_in_email_txt"
                     android:inputType="textEmailAddress"
                     android:layout_height="wrap_content"
-                    android:hint="@string/email" />
+                    android:hint="@string/email"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
