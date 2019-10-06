@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="clickableText">#063075</color>
+
+    <color name="chatBackground">#EDFCFBF4</color>
+    <color name="chatSender">#CCD8F3</color>
+    <color name="chatReceiver">#E3FFEA</color>
 </resources>

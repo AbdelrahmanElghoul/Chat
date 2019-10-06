@@ -22,12 +22,14 @@
     <string name="profile_IMG">profile</string>
 
     <!--Messages-->
-    <string name="Messages_KEY">message</string>
-    <string name="sender">sender</string>
-    <string name="TimeStamp">timeStamp</string>
+    <string name="Messages_KEY">Messages</string>
+    <string name="message">message</string>
+    <string name="sender">senderKey</string>
+    <string name="timeStamp">timeStamp</string>
 
     <!--Friend-->
     <string name="friendState">friendState</string>
+    <string name="sessionID">sessionID</string>
 
     <!--Friends State-->
     <string name="friend">friend</string>
