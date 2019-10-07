@@ -19,19 +19,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chat.CircleTransform;
 import com.example.chat.Friends;
+import com.example.chat.Messages;
 import com.example.chat.R;
+import com.example.chat.Rooms.Adapters.ChatSessionAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 
 public class ChatFragment extends Fragment {
@@ -48,9 +56,12 @@ public class ChatFragment extends Fragment {
     ImageButton btnSend;
     @BindView(R.id.txt_chat)
     EditText txtChat;
-
-    LinearLayoutManager chatLayout;
-    Friends friends;
+    private DatabaseReference chat_ref;
+    private LinearLayoutManager chatLayout;
+    private Friends friends;
+    private ChildEventListener chatListener;
+    private ChatSessionAdapter chatAdapter;
+    private List<Messages> messages =new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,11 +77,53 @@ public class ChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         SetUI();
 
+        if(friends.getSessionID()==null){
+            CreateChatSession();
+        }
         btnBack.setOnClickListener( v-> getFragmentManager().popBackStackImmediate());
         btnSend.setOnClickListener(v-> {
             AddMessage(txtChat.getText().toString());
             txtChat.getText().clear();
         });
+
+
+        chatListener=new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Timber.d(String.valueOf(dataSnapshot));
+                Messages tmp=dataSnapshot.getValue(Messages.class);
+                messages.add(tmp);
+                chatAdapter.notifyDataSetChanged();
+                chatRecycler.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        chat_ref=FirebaseDatabase.getInstance()
+                .getReference()
+                .child(getString(R.string.Messages_KEY))
+                .child(friends.getSessionID());
+
+            chat_ref.addChildEventListener(chatListener);
     }
 
     private void CreateChatSession() {
@@ -87,12 +140,8 @@ public class ChatFragment extends Fragment {
     }
 
     private void AddMessage(String Message){
-        if(Message==null)
+        if(Message==null || Message.isEmpty())
             return;
-        if(friends.getSessionID()==null){
-            CreateChatSession();
-        }
-
        DatabaseReference ref=FirebaseDatabase
                 .getInstance()
                 .getReference()
@@ -149,8 +198,14 @@ public class ChatFragment extends Fragment {
 
         txtAppbar.setText(friends.getName());
         chatRecycler.setHasFixedSize(true);
-        chatLayout=new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,true);
+        chatLayout=new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+
         chatRecycler.setLayoutManager(chatLayout);
+
+        chatAdapter=new ChatSessionAdapter(getContext(),messages);
+        chatRecycler.setAdapter(chatAdapter);
+        if(chatAdapter.getItemCount()>1)
+             chatRecycler.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
 
 
     }
@@ -162,5 +217,12 @@ public class ChatFragment extends Fragment {
                 .push().getKey();
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        chat_ref.removeEventListener(chatListener);
+    }
+
 
 }

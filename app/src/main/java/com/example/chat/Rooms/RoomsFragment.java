@@ -83,12 +83,12 @@ public class RoomsFragment extends Fragment {
                         if (dataSnapshot.hasChild(getString(R.string.profile_IMG)))
                             user.setProfilePic(dataSnapshot.child(getString(R.string.profile_IMG)).getValue(String.class));
 
-
                         AppBar.setText(user.getName());
                         FriendsFragment friendsFragment=new FriendsFragment();
                         Bundle b=new Bundle();
                         b.putParcelable(getString(R.string.User_KEY),user);
                         friendsFragment.setArguments(b);
+
                         adapter.addList(friendsFragment, "add");
                         pages.setAdapter(adapter);
                         tabs.setupWithViewPager(pages);

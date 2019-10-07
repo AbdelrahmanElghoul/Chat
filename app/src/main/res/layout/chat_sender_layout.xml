@@ -3,35 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/chat_padding"
+    android:layout_margin="@dimen/view_margin"
+
     >
 
     <LinearLayout
-
-        android:orientation="vertical"
+        android:padding="5dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/round_view_sender"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="312312313131"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/txt_date_sender"/>
+
             <TextView
+                android:layout_gravity="center_horizontal"
                 style="@style/chat_text"
+                android:text="13123123131231"
+                android:background="@drawable/round_view_sender"
                 android:id="@+id/txt_chat_sender"
                 />
 
-            <view
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:paddingStart="5dp"
-                android:id="@+id/txt_date_sender"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
