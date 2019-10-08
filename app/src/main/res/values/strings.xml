@@ -30,6 +30,7 @@
     <!--Friend-->
     <string name="friendState">friendState</string>
     <string name="sessionID">sessionID</string>
+    <string name="new_message">new_message</string>
 
     <!--Friends State-->
     <string name="friend">friend</string>
@@ -42,8 +43,7 @@
     <string name="MSG_Request_Sent">Request Sent</string>
     <string name="MSG_NoUseR">no user found with this email</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="type_message">Type a message</string>
 
 </resources>

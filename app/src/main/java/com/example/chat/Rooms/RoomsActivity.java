@@ -37,6 +37,8 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
     @Override
     protected void onStart() {
         super.onStart();
+        if(FirebaseAuth.getInstance().getUid()==null)
+            return;
         Timber.tag("Start").e(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
 
         if(getSupportFragmentManager().getBackStackEntryCount()>0){

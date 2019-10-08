@@ -84,12 +84,19 @@ public class RoomsFragment extends Fragment {
                             user.setProfilePic(dataSnapshot.child(getString(R.string.profile_IMG)).getValue(String.class));
 
                         AppBar.setText(user.getName());
+
                         FriendsFragment friendsFragment=new FriendsFragment();
                         Bundle b=new Bundle();
                         b.putParcelable(getString(R.string.User_KEY),user);
                         friendsFragment.setArguments(b);
 
-                        adapter.addList(friendsFragment, "add");
+                        ChatListFragment chatListFragment=new ChatListFragment();
+                        Bundle bundle=new Bundle();
+                        bundle.putParcelable(getString(R.string.User_KEY),user);
+                        chatListFragment.setArguments(bundle);
+
+                        adapter.addList(chatListFragment, getString(R.string.Messages_KEY));
+                        adapter.addList(friendsFragment, getString(R.string.friend));
                         pages.setAdapter(adapter);
                         tabs.setupWithViewPager(pages);
 

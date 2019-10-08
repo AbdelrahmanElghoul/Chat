@@ -9,6 +9,7 @@
     <dimen name="actionBarTxt">20sp</dimen>
     <dimen name="view_corners">25dp</dimen>
 
+    <dimen name="shade_width">50dp</dimen>
     <dimen name="chat_padding">50dp</dimen>
 
 </resources>

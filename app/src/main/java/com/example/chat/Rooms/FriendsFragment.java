@@ -263,9 +263,10 @@ public class FriendsFragment extends Fragment {
 
     }
 
+
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onStop() {
+        super.onStop();
         friendsRef.removeEventListener(friendsChildListener);
         Timber.d("Listener removed");
     }

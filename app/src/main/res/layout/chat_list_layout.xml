@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+
+    android:id="@+id/chat_list_layout"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/chat_list_avatar"
+        android:scaleType="fitCenter"
+        style="@style/profile"
+        android:src="@drawable/avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:gravity="start"
+        android:layout_height="wrap_content"
+        android:id="@+id/chat_list_name"
+        android:maxLines="1"
+        android:layout_margin="@dimen/view_margin"
+        app:layout_constraintStart_toEndOf="@id/chat_list_avatar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:gravity="start"
+        android:text="123213123123123eqweqwe12322222222222222221231231"
+        android:layout_margin="@dimen/view_margin"
+        android:id="@+id/chat_list_message"
+        app:layout_constraintStart_toEndOf="@id/chat_list_avatar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chat_list_name"/>
+
+    <View
+        android:layout_width="@dimen/shade_width"
+        android:background="@drawable/shade"
+        app:layout_constraintBottom_toBottomOf="@id/chat_list_message"
+        app:layout_constraintTop_toTopOf="@id/chat_list_message"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,8 +11,17 @@ public class Friends implements Parcelable {
     private String sessionID;
     private boolean chat_update;
     private String friendState;
+    private boolean new_message;
 
     public Friends() {
+    }
+
+    public boolean isNew_message() {
+        return new_message;
+    }
+
+    public void setNew_message(boolean new_message) {
+        this.new_message = new_message;
     }
 
     public String getProfile() {
@@ -85,6 +94,7 @@ public class Friends implements Parcelable {
         dest.writeString(this.sessionID);
         dest.writeByte(this.chat_update ? (byte) 1 : (byte) 0);
         dest.writeString(this.friendState);
+        dest.writeByte(this.new_message ? (byte) 1 : (byte) 0);
     }
 
     protected Friends(Parcel in) {
@@ -95,6 +105,7 @@ public class Friends implements Parcelable {
         this.sessionID = in.readString();
         this.chat_update = in.readByte() != 0;
         this.friendState = in.readString();
+        this.new_message = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<Friends> CREATOR = new Parcelable.Creator<Friends>() {

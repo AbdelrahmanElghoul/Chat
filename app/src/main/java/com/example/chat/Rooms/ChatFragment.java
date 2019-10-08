@@ -86,6 +86,8 @@ public class ChatFragment extends Fragment {
             txtChat.getText().clear();
         });
 
+        setNewMessage(FirebaseAuth.getInstance().getUid(),friends.getKey(),false);
+        setNewMessage(friends.getKey(),FirebaseAuth.getInstance().getUid(),false);
 
         chatListener=new ChildEventListener() {
             @Override
@@ -123,7 +125,7 @@ public class ChatFragment extends Fragment {
                 .child(getString(R.string.Messages_KEY))
                 .child(friends.getSessionID());
 
-            chat_ref.addChildEventListener(chatListener);
+        chat_ref.addChildEventListener(chatListener);
     }
 
     private void CreateChatSession() {
@@ -142,6 +144,7 @@ public class ChatFragment extends Fragment {
     private void AddMessage(String Message){
         if(Message==null || Message.isEmpty())
             return;
+
        DatabaseReference ref=FirebaseDatabase
                 .getInstance()
                 .getReference()
@@ -162,7 +165,25 @@ public class ChatFragment extends Fragment {
         ref.push().updateChildren(user).addOnFailureListener(e ->
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
 
+        setNewMessage(FirebaseAuth.getInstance().getUid(),friends.getKey(),true);
+        setNewMessage(friends.getKey(),FirebaseAuth.getInstance().getUid(),true);
 
+
+    }
+    private void setNewMessage(String userID,String friendID,boolean read){
+        DatabaseReference ref=FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(getString(R.string.User_KEY))
+                .child(userID)
+                .child(getString(R.string.Friends_KEY))
+                .child(friendID);
+
+        HashMap<String, Object> user = new HashMap<>();
+        user.put(getString(R.string.new_message),read);
+
+        ref.updateChildren(user).addOnFailureListener(e ->
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
     private void setMessageID(String UserID,String FriendID,String sessionID){
