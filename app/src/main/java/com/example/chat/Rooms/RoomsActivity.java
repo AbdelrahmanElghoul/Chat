@@ -39,17 +39,17 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
         super.onStart();
         if(FirebaseAuth.getInstance().getUid()==null)
             return;
-        Timber.tag("Start").e(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
+        Timber.d(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
 
         if(getSupportFragmentManager().getBackStackEntryCount()>0){
            boolean chatFrag=getSupportFragmentManager().popBackStackImmediate(CHAT_TAG,0);
 //           if(!chatFrag)
 //               getSupportFragmentManager().popBackStackImmediate(ROOM_TAG,0);
-            Timber.e("if");
+            Timber.d("if");
         }
         else{
 
-            Timber.e("Else");
+            Timber.d("Else");
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.rooms_frame,new RoomsFragment())

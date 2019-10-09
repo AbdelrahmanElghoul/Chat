@@ -43,7 +43,7 @@
     <string name="MSG_Request_Sent">Request Sent</string>
     <string name="MSG_NoUseR">no user found with this email</string>
 
-
     <string name="type_message">Type a message</string>
+    <string name="token">Token</string>
 
 </resources>

@@ -125,17 +125,17 @@ public class ChatListFragment extends Fragment {
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Timber.tag("Triggered").e(String.valueOf(dataSnapshot));
+                Timber.tag("Triggered").d(String.valueOf(dataSnapshot));
                 Messages msg = dataSnapshot.getChildren().iterator().next().getValue(Messages.class);
 
                 tmp.setMessage(msg.getMessage());
                 for (int i = 0; i < data.size(); i++) {
-                    Timber.tag("data").e(data.get(i).getKey());
-                    Timber.tag("tmp").e(tmp.getKey());
+                    Timber.tag("data").d(data.get(i).getKey());
+                    Timber.tag("tmp").d(tmp.getKey());
                     if (data.get(i).getKey().equals(tmp.getKey())) {
-                        Timber.tag("Before").e(String.valueOf(data.size()));
+                        Timber.tag("Before").d(String.valueOf(data.size()));
                         data.remove(i);
-                        Timber.tag("After").e(String.valueOf(data.size()));
+                        Timber.tag("After").d(String.valueOf(data.size()));
                         break;
                     }
                 }
@@ -161,8 +161,6 @@ public class ChatListFragment extends Fragment {
                 .child(tmp.getSessionID())
                 .orderByKey()
                 .limitToLast(1);
-
-        Timber.e("counter");
 
         tmpQuery.addValueEventListener(listener);
 

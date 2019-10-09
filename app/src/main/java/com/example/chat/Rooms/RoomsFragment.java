@@ -24,16 +24,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-
 public class RoomsFragment extends Fragment {
-
 
     @BindView(R.id.tab_layout)
     TabLayout tabs;
@@ -61,10 +62,16 @@ public class RoomsFragment extends Fragment {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
 
         btn_logout.setOnClickListener(v -> {
+            new Thread(() -> {
+                try {
+                    FirebaseInstanceId.getInstance().deleteInstanceId();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
             FirebaseAuth.getInstance().signOut();
             getActivity().finishAffinity();
         });
-
 
         FirebaseDatabase.getInstance()
                 .getReference()

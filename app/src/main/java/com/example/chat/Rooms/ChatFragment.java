@@ -231,7 +231,7 @@ public class ChatFragment extends Fragment {
 
     }
 
-    String generateKey(){
+    public static String generateKey(){
         return FirebaseDatabase
                 .getInstance()
                 .getReference()
