@@ -45,5 +45,7 @@
 
     <string name="type_message">Type a message</string>
     <string name="token">Token</string>
+    <!--Notification Message-->
+    <string name="Notify_FRIEND_REQUEST">sent you friend request</string>
 
 </resources>

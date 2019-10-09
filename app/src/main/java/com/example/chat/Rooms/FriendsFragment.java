@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chat.Friends;
+import com.example.chat.Notification.PushNotification;
 import com.example.chat.R;
 import com.example.chat.Rooms.Adapters.FriendRequestAdapter;
 import com.example.chat.Rooms.Adapters.FriendsAdapter;
@@ -159,6 +160,8 @@ public class FriendsFragment extends Fragment {
 
     private void AddFriendBtn(String Email) {
         Timber.d("Add btn");
+
+        new PushNotification().Notify(getContext(),"Title","Test Message",null,null);
 
         FirebaseInstanceId
                 .getInstance()
