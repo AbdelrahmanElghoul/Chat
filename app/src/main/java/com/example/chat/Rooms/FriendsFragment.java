@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class FriendsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_friend, container, false);
         ButterKnife.bind(this, v);
         assert getArguments() != null;
-        user=getArguments().getParcelable(getString(R.string.User_KEY));
+        user = getArguments().getParcelable(getString(R.string.User_KEY));
         friendsList = new ArrayList<>();
         requestList = new ArrayList<>();
         return v;
@@ -89,20 +90,19 @@ public class FriendsFragment extends Fragment {
         friendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         friendsRecyclerView.setAdapter(friendsAdapter);
 
-        friendsChildListener=new ChildEventListener() {
+        friendsChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Timber.tag("AddedData").d(String.valueOf(dataSnapshot));
                 Timber.tag("AddedS").d(dataSnapshot.getKey());
 
-                Friends tmp=dataSnapshot.getValue(Friends.class);
+                Friends tmp = dataSnapshot.getValue(Friends.class);
                 tmp.setKey(dataSnapshot.getKey());
 
-                if(tmp.getFriendState().equals(getString(R.string.friend))) {
+                if (tmp.getFriendState().equals(getString(R.string.friend))) {
                     friendsList.add(tmp);
                     friendsAdapter.notifyDataSetChanged();
-                }
-                else if(tmp.getFriendState().equals(getString(R.string.pendingRequest))) {
+                } else if (tmp.getFriendState().equals(getString(R.string.pendingRequest))) {
                     requestList.add(tmp);
                     requestAdapter.notifyDataSetChanged();
                 }
@@ -112,17 +112,16 @@ public class FriendsFragment extends Fragment {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Timber.d(String.valueOf(dataSnapshot));
                 Timber.d(s);
-                Friends tmp=dataSnapshot.getValue(Friends.class);
+                Friends tmp = dataSnapshot.getValue(Friends.class);
                 tmp.setKey(dataSnapshot.getKey());
-                if(tmp.getFriendState().equals(getString(R.string.pendingRequest))){
+                if (tmp.getFriendState().equals(getString(R.string.pendingRequest))) {
                     requestList.add(tmp);
                     requestAdapter.notifyDataSetChanged();
-                }
-                else if(tmp.getFriendState().equals(getString(R.string.friend))){
-                    for(int i=0;i<requestList.size();i++){
-                        if(requestList.get(i).getKey().equals(tmp.getKey())){
+                } else if (tmp.getFriendState().equals(getString(R.string.friend))) {
+                    for (int i = 0; i < requestList.size(); i++) {
+                        if (requestList.get(i).getKey().equals(tmp.getKey())) {
                             requestList.remove(i);
-                        break;
+                            break;
                         }
                     }
                     friendsList.add(tmp);
@@ -147,7 +146,7 @@ public class FriendsFragment extends Fragment {
             }
         };
 
-        friendsRef=FirebaseDatabase
+        friendsRef = FirebaseDatabase
                 .getInstance()
                 .getReference()
                 .child(getString(R.string.User_KEY))
@@ -159,10 +158,9 @@ public class FriendsFragment extends Fragment {
     }
 
     private void AddFriendBtn(String Email) {
+
+
         Timber.d("Add btn");
-
-        new PushNotification().Notify(getContext(),"Title","Test Message",null,null);
-
         FirebaseInstanceId
                 .getInstance()
                 .getInstanceId()
@@ -174,7 +172,7 @@ public class FriendsFragment extends Fragment {
         if (friendsList == null || friendsList.size() == 0)
             GetUserID(Email);
         else {
-            boolean found=false;
+            boolean found = false;
             for (Friends friends : friendsList) {
                 if (friends.getEmail().equals(Email)) {
                     if (getString(R.string.friend).equals(friends.getFriendState())) {
@@ -182,20 +180,19 @@ public class FriendsFragment extends Fragment {
                     } else if (getString(R.string.pendingRequest).equals(friends.getFriendState())) {
                         Toast.makeText(getContext(), getString(R.string.MSG_pendingRequest), Toast.LENGTH_SHORT).show();
 
-                    }else if(getString(R.string.RequestSent).equals(friends.getFriendState())) {
+                    } else if (getString(R.string.RequestSent).equals(friends.getFriendState())) {
                         Toast.makeText(getContext(), getString(R.string.MSG_Request_Sent), Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                    } else {
                         AddFriendReceiver(user, friends);
                         AddFriendSender(friends);
                     }
-                    found=true;
+                    found = true;
                     break;
                 }
 
             }
-            if(!found)
-              GetUserID(Email);
+            if (!found)
+                GetUserID(Email);
         }
     }
 
@@ -268,11 +265,46 @@ public class FriendsFragment extends Fragment {
         data.put(getString(R.string.email), user.getEmail());
         data.put(getString(R.string.profile_IMG), user.getProfilePic());
         data.put(getString(R.string.friendState), getString(R.string.pendingRequest));
-        userRef.updateChildren(data).addOnFailureListener(e ->
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
 
+        userRef.updateChildren(data)
+                .addOnSuccessListener(o -> {
+                    Query ref = FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child(getString(R.string.token))
+                            .child(friend.getKey());
+
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Timber.d(String.valueOf(dataSnapshot));
+                            if (dataSnapshot != null) {
+
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                db.collection("api")
+                                        .document("keys")
+                                        .get()
+                                        .addOnSuccessListener(documentSnapshot -> {
+                                                    String ServerKey = String.valueOf(documentSnapshot.getData().get("fcm_server_key"));
+                                                    Timber.e("Called %s", ServerKey);
+                                                    new PushNotification(getContext(), ServerKey)
+                                                            .Notify(getString(R.string.Notify_FRIEND_REQUEST_Title)
+                                                                    , friend.getName() + " " + getString(R.string.Notify_FRIEND_REQUEST_msg)
+                                                                    , dataSnapshot.getValue(String.class));
+                                                }
+                                        );
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
     }
-
 
     @Override
     public void onStop() {

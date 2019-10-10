@@ -14,12 +14,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class RoomsActivity extends AppCompatActivity implements OpenChatFragment{
+public class RoomsActivity extends AppCompatActivity implements OpenChatFragment {
 
-
-    private static final String CHAT_TAG=ChatFragment.class.getSimpleName();
-    private static final String ROOM_TAG=RoomsFragment.class.getSimpleName();
-
+    private static final String CHAT_TAG = ChatFragment.class.getSimpleName();
+    private static final String ROOM_TAG = RoomsFragment.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,73 +25,74 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
         setContentView(R.layout.activity_rooms);
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
-        Firebase.setPersisstace();
+        Firebase.setPersistence();
 
-        if(FirebaseAuth.getInstance().getUid()==null)
+        if (FirebaseAuth.getInstance().getUid() == null)
             startActivity(new Intent(this, AuthActivity.class));
+
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(FirebaseAuth.getInstance().getUid()==null)
+        if (FirebaseAuth.getInstance().getUid() == null)
             return;
         Timber.d(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
 
-        if(getSupportFragmentManager().getBackStackEntryCount()>0){
-           boolean chatFrag=getSupportFragmentManager().popBackStackImmediate(CHAT_TAG,0);
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            boolean chatFrag = getSupportFragmentManager().popBackStackImmediate(CHAT_TAG, 0);
 //           if(!chatFrag)
 //               getSupportFragmentManager().popBackStackImmediate(ROOM_TAG,0);
             Timber.d("if");
-        }
-        else{
+        } else {
 
             Timber.d("Else");
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.rooms_frame,new RoomsFragment())
+                    .add(R.id.rooms_frame, new RoomsFragment())
                     .addToBackStack(ROOM_TAG)
-                    .commit();}
+                    .commit();
+        }
 
     }
 
     @Override
     public void onBackPressed() {
-        Timber.tag("Back").e(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
-        boolean RoomsFrag=false;
-        if(getSupportFragmentManager().getBackStackEntryCount()>0) {
+        Timber.tag("Back").d(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
+        boolean RoomsFrag = false;
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             RoomsFrag = getSupportFragmentManager().popBackStackImmediate(ROOM_TAG, 0);
         }
-        if(!RoomsFrag)
+        if (!RoomsFrag)
             finishAffinity();
     }
 
     @Override
     public void openFragment(Friends friends) {
 
-        ChatFragment chatFragment=new ChatFragment();
-        Bundle b=new Bundle();
-        b.putParcelable(getString(R.string.Friends_KEY),friends);
+        ChatFragment chatFragment = new ChatFragment();
+        Bundle b = new Bundle();
+        b.putParcelable(getString(R.string.Friends_KEY), friends);
         chatFragment.setArguments(b);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.rooms_frame,chatFragment)
+                .replace(R.id.rooms_frame, chatFragment)
                 .addToBackStack(CHAT_TAG)
                 .commit();
     }
 
-
 }
 
-class Firebase{
+class Firebase {
 
-    private static boolean persistence =false;
-    static void setPersisstace() {
-        if(!persistence){
+    private static boolean persistence = false;
+
+    static void setPersistence() {
+        if (!persistence) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            persistence =true;
+            persistence = true;
         }
     }
 }

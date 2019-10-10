@@ -1,7 +1,6 @@
 package com.example.chat.Notification;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,39 +18,47 @@ import timber.log.Timber;
 public class PushNotification {
 
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
-//    private String serverKey = "key=" + "AAAAwouVYwo:APA91bH54sSDh3ETUtFeDT1mOmFhEv9JUK8aX28n8p3urcbqX9z4HapFnM4BbtBGOm1q5XxqHyMnWGadsQfQZhVtcc1So9gS7tuPDvkeewrqJG29taVO3S49QdDjpyL9GJTMLz5_iXBX";
     final private String contentType = "application/json";
+    public static String TITLE_KEY="title";
+    public static String MESSAGE_KEY="message";
+    public static String TO_KEY="to";
+    public static String DATA_KEY="data";
+    public static String AUTH_KEY="Authorization";
+    public static String CONTENT_TYPE_KEY="Content-Type";
+    private String ServerKey;
+    private Context context;
 
-    public void Notify(Context context,String NOTIFICATION_TITLE,String NOTIFICATION_MESSAGE,String TOKEN,String ServerKey){
+    public PushNotification(Context context,String ServerKey){
+        this.context=context;
+        this.ServerKey=ServerKey;
+            }
 
-       String TOPIC = "/"+TOKEN; //topic must match with what the receiver subscribed to
-
+    public void Notify(String title,String message,String token){
         JSONObject notification = new JSONObject();
-        JSONObject notifcationBody = new JSONObject();
+        JSONObject notificationBody = new JSONObject();
         try {
-            notifcationBody.put("title", NOTIFICATION_TITLE);
-            notifcationBody.put("message", NOTIFICATION_MESSAGE);
+            notificationBody.put(TITLE_KEY, title);
+            notificationBody.put(MESSAGE_KEY, message);
 
-            notification.put("to", TOPIC);
-            notification.put("data", notifcationBody);
+            notification.put(TO_KEY, "/"+token);
+            Timber.d(message);
+            notification.put(DATA_KEY, notificationBody);
         } catch (JSONException e) {
             Timber.e(e);
         }
-        sendNotification(context,notification,ServerKey);
+        sendNotification(notification);
     }
 
-    private void sendNotification(Context context,JSONObject notification,String ServerKey) {
+    private void sendNotification(JSONObject notification) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
                 response -> Timber.d(response.toString()),
-                error -> {
-                    Toast.makeText(context, "Request error", Toast.LENGTH_LONG).show();
-                    Timber.e(error);
-                }){
+                Timber::e
+                ){
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "key=" +ServerKey);
-                params.put("Content-Type", contentType);
+                params.put(AUTH_KEY, "key=" +ServerKey);
+                params.put(CONTENT_TYPE_KEY, contentType);
                 return params;
             }
         };

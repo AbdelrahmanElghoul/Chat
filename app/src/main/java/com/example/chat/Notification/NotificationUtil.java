@@ -46,7 +46,7 @@ public class NotificationUtil {
 
         NotificationCompat.Builder builder=
                 new NotificationCompat.Builder(context,Notify_Channel_ID)
-                        .setColor(ContextCompat.getColor(context,R.color.colorAccent))
+                        .setColor(ContextCompat.getColor(context,R.color.notification))
                         .setContentTitle(Title)
                         .setContentText(msg)
                         .setSmallIcon(R.mipmap.ic_launcher)
