@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/search"
             android:id="@+id/txt_search"
-
             android:layout_weight="1"/>
         <ImageButton
             android:layout_width="wrap_content"

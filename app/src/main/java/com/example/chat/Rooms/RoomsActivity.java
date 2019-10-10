@@ -30,7 +30,6 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
         if (FirebaseAuth.getInstance().getUid() == null)
             startActivity(new Intent(this, AuthActivity.class));
 
-
     }
 
     @Override
@@ -78,11 +77,12 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
 
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                        R.anim.slide_out_right, R.anim.slide_in_right)
                 .replace(R.id.rooms_frame, chatFragment)
                 .addToBackStack(CHAT_TAG)
                 .commit();
     }
-
 }
 
 class Firebase {

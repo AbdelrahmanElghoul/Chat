@@ -75,6 +75,7 @@
             android:layout_width="match_parent"
             app:tabMode="fixed"
             app:tabGravity="fill"
+            app:tabMaxWidth="0dp"
             android:id="@+id/tab_layout"
             android:layout_height="wrap_content"/>
 
