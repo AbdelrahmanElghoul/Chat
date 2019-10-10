@@ -114,19 +114,33 @@ public class FriendsFragment extends Fragment {
                 Timber.d(s);
                 Friends tmp = dataSnapshot.getValue(Friends.class);
                 tmp.setKey(dataSnapshot.getKey());
+
                 if (tmp.getFriendState().equals(getString(R.string.pendingRequest))) {
                     requestList.add(tmp);
                     requestAdapter.notifyDataSetChanged();
-                } else if (tmp.getFriendState().equals(getString(R.string.friend))) {
+                }
+                else if (tmp.getFriendState().equals(getString(R.string.friend))) {
+                    boolean isRequest=false;
                     for (int i = 0; i < requestList.size(); i++) {
                         if (requestList.get(i).getKey().equals(tmp.getKey())) {
                             requestList.remove(i);
+                            isRequest=true;
                             break;
                         }
                     }
-                    friendsList.add(tmp);
+                    if(isRequest)
+                         friendsList.add(tmp);
                     requestAdapter.notifyDataSetChanged();
                     friendsAdapter.notifyDataSetChanged();
+                }
+                else{
+                    for (int i = 0; i < requestList.size(); i++) {
+                        if (requestList.get(i).getKey().equals(tmp.getKey())) {
+                            requestList.remove(i);
+                            requestAdapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -158,7 +172,6 @@ public class FriendsFragment extends Fragment {
     }
 
     private void AddFriendBtn(String Email) {
-
 
         Timber.d("Add btn");
         FirebaseInstanceId
@@ -194,6 +207,8 @@ public class FriendsFragment extends Fragment {
             if (!found)
                 GetUserID(Email);
         }
+
+        txt_Search.getText().clear();
     }
 
     private void GetUserID(String Email) {
@@ -288,7 +303,7 @@ public class FriendsFragment extends Fragment {
                                                     Timber.e("Called %s", ServerKey);
                                                     new PushNotification(getContext(), ServerKey)
                                                             .Notify(getString(R.string.Notify_FRIEND_REQUEST_Title)
-                                                                    , friend.getName() + " " + getString(R.string.Notify_FRIEND_REQUEST_msg)
+                                                                    , user.getName() + " " + getString(R.string.Notify_FRIEND_REQUEST_msg)
                                                                     , dataSnapshot.getValue(String.class));
                                                 }
                                         );
@@ -304,6 +319,8 @@ public class FriendsFragment extends Fragment {
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
+
+        Toast.makeText(getContext(), getString(R.string.MSG_Request_Sent), Toast.LENGTH_SHORT).show();
     }
 
     @Override

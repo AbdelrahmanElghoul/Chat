@@ -51,10 +51,9 @@ public class NotificationUtil {
                         .setContentText(msg)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
+                        .setDefaults(Notification.DEFAULT_ALL)
                         .setContentIntent(contentIntent(context))
                         .setAutoCancel(true);
-
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
                 && Build.VERSION.SDK_INT <Build.VERSION_CODES.O)

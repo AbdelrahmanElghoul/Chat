@@ -1,7 +1,10 @@
 package com.example.chat.Notification;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
+import com.example.chat.Rooms.RoomsActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -25,6 +28,8 @@ public class NotificationService extends FirebaseMessagingService {
         String title = data.get(PushNotification.TITLE_KEY);
         String message = data.get(PushNotification.MESSAGE_KEY);
 
-        NotificationUtil.ShowNotification(this,title,message);
+        Context context=this;
+        if(!(context instanceof RoomsActivity))
+             NotificationUtil.ShowNotification(this,title,message);
     }
 }

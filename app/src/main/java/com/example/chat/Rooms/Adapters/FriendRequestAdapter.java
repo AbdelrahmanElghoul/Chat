@@ -65,13 +65,11 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         holder.friend_name.setText(requestList.get(position).getName());
 
         holder.accept_request.setOnClickListener(v -> {
-            Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
             Request(requestList.get(position).getKey(), FirebaseAuth.getInstance().getUid(), context.getString(R.string.friend));
             Request(FirebaseAuth.getInstance().getUid(), requestList.get(position).getKey(), context.getString(R.string.friend));
         });
 
         holder.cancel_request.setOnClickListener(v -> {
-            Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
             Request(requestList.get(position).getKey(), FirebaseAuth.getInstance().getUid(), context.getString(R.string.removed_Friend));
             Request(FirebaseAuth.getInstance().getUid(), requestList.get(position).getKey(), context.getString(R.string.removed_Friend));
         });

@@ -110,7 +110,9 @@ public class ChatListFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        if(ref!=null)
         ref.removeEventListener(childEventListener);
+        if(tmpQuery!=null)
         tmpQuery.removeEventListener(listener);
     }
 
@@ -126,6 +128,8 @@ public class ChatListFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Timber.tag("Triggered").d(String.valueOf(dataSnapshot));
+                if(dataSnapshot.getValue()==null)
+                    return;
                 Messages msg = dataSnapshot.getChildren().iterator().next().getValue(Messages.class);
 
                 tmp.setMessage(msg.getMessage());

@@ -174,26 +174,26 @@ public class ChatFragment extends Fragment {
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child(getString(R.string.token))
-                .orderByKey().equalTo(friends.getKey());
+                .child(friends.getKey());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
+                if (dataSnapshot == null)  return;
+                     Timber.tag("token").d(String.valueOf(dataSnapshot.getValue()));
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("api")
                             .document("keys")
                             .get()
                             .addOnSuccessListener(documentSnapshot -> {
                                         String ServerKey = String.valueOf(documentSnapshot.getData().get("fcm_server_key"));
+
                                         new PushNotification(getContext(), ServerKey)
                                                 .Notify(friends.getName()
                                                         , Message
                                                         , dataSnapshot.getValue(String.class));
                                     }
                             );
-                }
-
             }
 
             @Override
@@ -240,7 +240,7 @@ public class ChatFragment extends Fragment {
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
-    void SetUI() {
+    private void SetUI() {
         Picasso.get()
                 .load(friends.getProfile())
                 .transform(new CircleTransform())
@@ -253,6 +253,7 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onError(Exception e) {
                         imgAvatar.setBackgroundResource(R.drawable.avatar);
+                        Timber.e(e);
                     }
                 });
 
@@ -283,6 +284,5 @@ public class ChatFragment extends Fragment {
         super.onPause();
         chat_ref.removeEventListener(chatListener);
     }
-
 
 }

@@ -19,12 +19,12 @@ public class PushNotification {
 
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String contentType = "application/json";
-    public static String TITLE_KEY="title";
-    public static String MESSAGE_KEY="message";
-    public static String TO_KEY="to";
-    public static String DATA_KEY="data";
-    public static String AUTH_KEY="Authorization";
-    public static String CONTENT_TYPE_KEY="Content-Type";
+    static String TITLE_KEY="title";
+    static String MESSAGE_KEY="message";
+    private static String TO_KEY="to";
+    private static String DATA_KEY="data";
+    private static String AUTH_KEY="Authorization";
+    private static String CONTENT_TYPE_KEY="Content-Type";
     private String ServerKey;
     private Context context;
 

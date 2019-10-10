@@ -79,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:id="@+id/txt_chat"
+        android:focusedByDefault="true"
         android:hint="@string/type_message"
        />
 
