@@ -1,66 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/layout_margin"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/background_1"
+    android:padding="@dimen/low_margin_padding"
+    android:layout_margin="@dimen/low_margin_padding"
     tools:context=".Register.Fragment_LogIn">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"
+        />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:id="@+id/log_in_email_input_layout"
-                android:layout_margin="@dimen/view_margin"
-                android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:id="@+id/log_in_email_txt"
-                    android:inputType="textEmailAddress"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/email"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_margin="@dimen/view_margin"
-                app:passwordToggleEnabled="true"
-                android:id="@+id/log_in_password_input_layout"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/log_in_password_txt"
-                    android:inputType="textPassword"
-                    android:hint="@string/password" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/log_in_password_input_layout"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_gravity="end"
-                android:id="@+id/btn_log_in"
-                android:hint="@string/log_in"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/view_margin"
-                android:layout_gravity="start|top"
-                style="@style/clickableText"
-                android:id="@+id/txt_create_new_account"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/high_margin_padding"
+                android:id="@+id/logo"
+                android:background="@drawable/image_frame"
+                android:scaleType="fitCenter"
+                app:layout_constraintTop_toBottomOf="@id/guideline_top"
                 app:layout_constraintStart_toStartOf="parent"
-                android:text="@string/create_new_account"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/wetalk_icon" />
 
-        </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/log_in_email_input_layout"
+                style="@style/text_input_layout"
+                app:layout_constraintTop_toBottomOf="@id/logo"
+                tools:ignore="MissingConstraints">
 
-</androidx.cardview.widget.CardView>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/log_in_email_txt"
+                    android:hint="@string/email"
+                    style="@style/text_input"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/log_in_password_input_layout"
+                app:layout_constraintTop_toBottomOf="@id/log_in_email_input_layout"
+                style="@style/text_input_layout"
+                app:passwordToggleEnabled="true"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/log_in_password_txt"
+                    style="@style/text_input"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            style="@style/button"
+            android:id="@+id/btn_log_in"
+            android:hint="@string/log_in"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/log_in_password_input_layout" />
+
+        <Button
+            android:id="@+id/btn_create_new_account"
+            style="@style/button"
+            android:padding="@dimen/average_margin_padding"
+            android:hint="@string/create_new_account"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line_view" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/line_view"
+        android:layout_marginEnd="@dimen/high_margin_padding"
+        android:layout_marginStart="@dimen/high_margin_padding"
+        app:layout_constraintTop_toBottomOf="@id/btn_log_in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/line_separator"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

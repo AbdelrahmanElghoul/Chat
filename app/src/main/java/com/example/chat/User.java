@@ -25,7 +25,7 @@ public class User implements Parcelable {
         this.email = email;
     }
 
-    public String getProfilePic() {
+    public String getProfile() {
         return profile;
     }
 

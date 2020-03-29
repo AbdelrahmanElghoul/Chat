@@ -267,8 +267,6 @@ public class ChatFragment extends Fragment {
         chatRecycler.setAdapter(chatAdapter);
         if (chatAdapter.getItemCount() > 1)
             chatRecycler.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
-
-
     }
 
     public static String generateKey() {

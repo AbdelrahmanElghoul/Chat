@@ -11,15 +11,15 @@
         android:layout_width="match_parent"
         android:id="@+id/toolbar_container"
         android:layout_height="wrap_content"
-        android:padding="@dimen/view_margin"
+        android:padding="@dimen/low_margin_padding"
         android:background="?colorPrimary">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:theme="@style/ToolbarTheme"
             app:contentInsetStart="10dp"
             android:layout_width="match_parent"
-
+            app:menu="@menu/rooms_menu"
             android:layout_height="?actionBarSize"
             android:layout_gravity="bottom">
 
@@ -30,6 +30,7 @@
                 <ImageView
                     android:layout_width="@dimen/profile_width_height"
                     android:layout_height="@dimen/profile_width_height"
+                    android:background="@drawable/round_view"
                     android:scaleType="fitCenter"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -37,29 +38,20 @@
                     android:src="@drawable/avatar"
                     android:id="@+id/avatar"
                     android:contentDescription="@string/app_name" />
+
                 <TextView
                     android:layout_width="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/avatar"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/img_exit"
                     android:gravity="start"
+                    style="@style/AppTheme"
                     android:id="@+id/txt_app_bar"
-                    android:layout_margin="@dimen/view_margin"
+                    android:layout_margin="@dimen/average_margin_padding"
                     android:text="@string/app_name"
                     android:textSize="@dimen/actionBarTxt"
                     android:layout_height="wrap_content"/>
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:id="@+id/img_exit"
-                    android:background="@null"
-                    android:layout_margin="@dimen/view_margin"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:src="@drawable/exit"/>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
@@ -75,6 +67,7 @@
             android:layout_width="match_parent"
             app:tabMode="fixed"
             app:tabGravity="fill"
+            android:background="@color/background_1"
             app:tabMaxWidth="0dp"
             android:id="@+id/tab_layout"
             android:layout_height="wrap_content"/>
@@ -86,6 +79,5 @@
             />
 
     </LinearLayout>
-
 
 </LinearLayout>

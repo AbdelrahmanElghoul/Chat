@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="clickableText">#063075</color>
+    <color name="colorPrimary">#046D8B</color><!--#6B754C05-->
+    <color name="colorPrimaryDark">#012933</color>
+    <color name="colorAccent">#D50184</color>
+
+    <color name="clickableText">#01172E</color>
 
     <color name="notification">#00FFFFFF</color>
     <color name="chatBackground">#EDFCFBF4</color>
     <color name="chatSender">#CCD8F3</color>
     <color name="chatReceiver">#E3FFEA</color>
+
+    <color name="line_separator">#021231</color>
+
+
+    <color name="button_color">#4BBBBAB7</color>
+
+    <color name="hint_color">#92032F55</color>
+
+    <color name="default_text_color">#AB01012B</color>
+    <color name="default_menu_background_color">#FFFFFF</color>
+    <color name="default_menu_text_color">#000000</color>
+
+    <color name="icons_color">#615F5F</color>
+    <color name="menu_text_color">#615F5F</color>
+
+    <color name="background_1">#AEE9E7E7</color> <!--3EAED6F8  / AEE9E7E7-->
+    <color name="background_2">#FAF8F8</color>
 </resources>

@@ -275,10 +275,10 @@ public class FriendsFragment extends Fragment {
                 .child(FirebaseAuth.getInstance().getUid())//friends ID
         ;
         HashMap data = new HashMap();
-        Timber.d(String.valueOf(user.getProfilePic()));
+        Timber.d(String.valueOf(user.getProfile()));
         data.put(getString(R.string.name), user.getName());
         data.put(getString(R.string.email), user.getEmail());
-        data.put(getString(R.string.profile_IMG), user.getProfilePic());
+        data.put(getString(R.string.profile_IMG), user.getProfile());
         data.put(getString(R.string.friendState), getString(R.string.pendingRequest));
 
         userRef.updateChildren(data)

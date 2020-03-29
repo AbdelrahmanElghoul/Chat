@@ -1,12 +1,12 @@
 package com.example.chat.Register;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,8 +25,8 @@ import timber.log.Timber;
 
 public class Fragment_LogIn extends Fragment {
 
-    @BindView(R.id.txt_create_new_account)
-    TextView txtNewAcc;
+    @BindView(R.id.btn_create_new_account)
+    Button txtNewAcc;
 
     @BindView(R.id.log_in_email_txt)
     EditText Email;
@@ -73,10 +73,16 @@ public class Fragment_LogIn extends Fragment {
     void LogIn() {
 
         if (!ValidateViews()) return;
+        ProgressDialog progressDialog=ProgressDialog.show(getContext(), "",
+                "logging in. Please wait...", true);
+        progressDialog.show();
+
+
         firebaseAuth.signInWithEmailAndPassword(Email.getText().toString(), Password.getText().toString())
                 .addOnSuccessListener(authResult -> {
                     openRoomsActivity open = (openRoomsActivity) getContext();
                     open.LogIn();
+
                         }
                 )
                 .addOnFailureListener(e -> {
@@ -84,5 +90,6 @@ public class Fragment_LogIn extends Fragment {
                             Timber.e(e);
                         }
                 );
+        progressDialog.dismiss();
     }
 }

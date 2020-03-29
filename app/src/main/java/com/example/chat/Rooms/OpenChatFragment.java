@@ -1,8 +1,10 @@
 package com.example.chat.Rooms;
 
-import com.example.chat.Friends;
+import androidx.fragment.app.Fragment;
+
+import com.example.chat.User;
 
 public interface OpenChatFragment {
 
-    void openFragment(Friends friends);
+    void openFragment(User friends, Fragment fragment);
 }

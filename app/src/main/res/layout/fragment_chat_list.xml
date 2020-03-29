@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="true"
-    android:padding="@dimen/view_margin"
+    android:background="@color/background_2"
+    android:padding="@dimen/average_margin_padding"
     android:id="@+id/recycler_chat_list"
     tools:context=".Rooms.ChatListFragment">
-
 
 
 </androidx.recyclerview.widget.RecyclerView>

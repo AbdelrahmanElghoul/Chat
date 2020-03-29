@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.chat.CircleTransform;
 import com.example.chat.Friends;
 import com.example.chat.R;
+import com.example.chat.Rooms.ChatFragment;
 import com.example.chat.Rooms.OpenChatFragment;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -62,7 +63,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 });
         holder.friend_name.setText(friendsList.get(position).getName());
         holder.layout.setOnClickListener(v -> {
-            chatFragment.openFragment(friendsList.get(position));
+            chatFragment.openFragment(friendsList.get(position), new ChatFragment());
 
         });
     }

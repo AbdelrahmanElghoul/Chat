@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_margin="@dimen/view_margin"
+                android:layout_margin="@dimen/average_margin_padding"
                 android:layout_height="?actionBarSize">
 
                 <ImageButton
@@ -43,7 +43,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/avatar"
                     android:id="@+id/avatar"
-                    android:layout_margin="@dimen/view_margin"
+                    android:layout_margin="@dimen/average_margin_padding"
                     android:contentDescription="@string/app_name" />
                 <TextView
                     android:layout_width="0dp"
@@ -69,7 +69,7 @@
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/layout_margin"
+    android:layout_margin="@dimen/high_margin_padding"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     android:orientation="horizontal">
@@ -89,7 +89,7 @@
         android:src="@drawable/send"
         android:background="@null"
         android:id="@+id/btn_send"
-        android:padding="@dimen/view_margin"
+        android:padding="@dimen/average_margin_padding"
         android:layout_height="wrap_content"/>
 
     </LinearLayout>

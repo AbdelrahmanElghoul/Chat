@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_margin="@dimen/layout_margin"
+        android:layout_margin="@dimen/high_margin_padding"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <EditText
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:id="@+id/friends_list"
         android:background="#A1FFFFFF"
-        android:layout_margin="@dimen/view_margin"
+        android:layout_margin="@dimen/average_margin_padding"
         android:clipToPadding="false"
         android:layout_height="0dp"
         android:layout_weight="1"/>

@@ -49,7 +49,7 @@ public class NotificationUtil {
                         .setColor(ContextCompat.getColor(context,R.color.notification))
                         .setContentTitle(Title)
                         .setContentText(msg)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.drawable.wetalk_icon)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setContentIntent(contentIntent(context))

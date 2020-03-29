@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-import com.example.chat.Friends;
 import com.example.chat.R;
 import com.example.chat.Register.AuthActivity;
+import com.example.chat.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,6 +23,7 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_rooms);
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
@@ -40,12 +42,8 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
         Timber.d(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
 
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            boolean chatFrag = getSupportFragmentManager().popBackStackImmediate(CHAT_TAG, 0);
-//           if(!chatFrag)
-//               getSupportFragmentManager().popBackStackImmediate(ROOM_TAG,0);
             Timber.d("if");
         } else {
-
             Timber.d("Else");
             getSupportFragmentManager()
                     .beginTransaction()
@@ -68,21 +66,20 @@ public class RoomsActivity extends AppCompatActivity implements OpenChatFragment
     }
 
     @Override
-    public void openFragment(Friends friends) {
-
-        ChatFragment chatFragment = new ChatFragment();
+    public void openFragment(User friends, Fragment fragment) {
         Bundle b = new Bundle();
         b.putParcelable(getString(R.string.Friends_KEY), friends);
-        chatFragment.setArguments(b);
+        fragment.setArguments(b);
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
                         R.anim.slide_out_right, R.anim.slide_in_right)
-                .replace(R.id.rooms_frame, chatFragment)
+                .replace(R.id.rooms_frame, fragment)
                 .addToBackStack(CHAT_TAG)
                 .commit();
     }
+
 }
 
 class Firebase {

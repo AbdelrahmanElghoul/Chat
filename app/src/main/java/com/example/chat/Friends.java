@@ -3,11 +3,8 @@ package com.example.chat;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Friends implements Parcelable {
+public class Friends extends User{
     private String Key;
-    private String name;
-    private String profile;
-    private String email;
     private String sessionID;
     private boolean chat_update;
     private String friendState;
@@ -24,28 +21,12 @@ public class Friends implements Parcelable {
         this.new_message = new_message;
     }
 
-    public String getProfile() {
-        return profile;
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
-
     public String getKey() {
         return Key;
     }
 
     public void setKey(String key) {
         this.Key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getSessionID() {
@@ -64,14 +45,6 @@ public class Friends implements Parcelable {
         this.chat_update = chat_update;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getFriendState() {
         return friendState;
     }
@@ -88,9 +61,6 @@ public class Friends implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.Key);
-        dest.writeString(this.name);
-        dest.writeString(this.profile);
-        dest.writeString(this.email);
         dest.writeString(this.sessionID);
         dest.writeByte(this.chat_update ? (byte) 1 : (byte) 0);
         dest.writeString(this.friendState);
@@ -99,9 +69,6 @@ public class Friends implements Parcelable {
 
     protected Friends(Parcel in) {
         this.Key = in.readString();
-        this.name = in.readString();
-        this.profile = in.readString();
-        this.email = in.readString();
         this.sessionID = in.readString();
         this.chat_update = in.readByte() != 0;
         this.friendState = in.readString();

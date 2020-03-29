@@ -11,8 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chat.CircleTransform;
 import com.example.chat.R;
+import com.example.chat.Rooms.ChatFragment;
 import com.example.chat.Rooms.ChatListData;
 import com.example.chat.Rooms.OpenChatFragment;
 import com.squareup.picasso.Callback;
@@ -47,19 +47,19 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
     public void onBindViewHolder(@NonNull ChatListVH holder, int position) {
         Picasso.get()
                 .load(friendsList.get(position).getProfile())
-                .transform(new CircleTransform())
                 .into(holder.imgAvatar, new Callback() {
                     @Override
                     public void onSuccess() {
-
+                        Timber.tag("ChatList").d("avatar uploaded");
                     }
 
                     @Override
                     public void onError(Exception e) {
                             holder.imgAvatar.setImageResource(R.drawable.avatar);
-                            Timber.e(e);
+                            Timber.tag("ChatList").e(e);
                     }
                 });
+        Timber.tag("img").d(friendsList.get(position).getMessage());
 
         holder.txtName.setText(friendsList.get(position).getName());
         holder.txtMessage.setText(friendsList.get(position).getMessage());
@@ -68,7 +68,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
             holder.txtName.setTypeface(null, Typeface.BOLD);
 
         }
-        holder.layout.setOnClickListener(v-> chatFragment.openFragment(friendsList.get(position)));
+        holder.layout.setOnClickListener(v-> chatFragment.openFragment(friendsList.get(position),new ChatFragment()));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
 
     class ChatListVH extends RecyclerView.ViewHolder{
         @BindView(R.id.chat_list_avatar)
-        ImageView imgAvatar;;
+        ImageView imgAvatar;
         @BindView(R.id.chat_list_layout)
         View layout;
         @BindView(R.id.chat_list_name)

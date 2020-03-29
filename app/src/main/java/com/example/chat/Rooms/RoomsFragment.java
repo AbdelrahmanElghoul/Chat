@@ -2,21 +2,23 @@ package com.example.chat.Rooms;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.chat.CircleTransform;
 import com.example.chat.R;
 import com.example.chat.Rooms.Adapters.ViewPagerAdapter;
+import com.example.chat.SettingFragment;
 import com.example.chat.User;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,21 +38,23 @@ import timber.log.Timber;
 
 public class RoomsFragment extends Fragment {
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.tab_layout)
     TabLayout tabs;
     @BindView(R.id.view_pager)
     ViewPager pages;
-    @BindView(R.id.img_exit)
-    ImageButton btn_logout;
     @BindView(R.id.txt_app_bar)
     TextView AppBar;
     @BindView(R.id.avatar)
     ImageView avatar;
+
     private User user ;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_rooms,container,false);
+        setHasOptionsMenu(true);
         ButterKnife.bind(this,v);
         return v;
     }
@@ -61,17 +65,6 @@ public class RoomsFragment extends Fragment {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
 
-        btn_logout.setOnClickListener(v -> {
-            new Thread(() -> {
-                try {
-                    FirebaseInstanceId.getInstance().deleteInstanceId();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-            FirebaseAuth.getInstance().signOut();
-            getActivity().finishAffinity();
-        });
 
         FirebaseDatabase.getInstance()
                 .getReference()
@@ -92,14 +85,14 @@ public class RoomsFragment extends Fragment {
 
                         AppBar.setText(user.getName());
 
-                        FriendsFragment friendsFragment=new FriendsFragment();
-                        Bundle b=new Bundle();
-                        b.putParcelable(getString(R.string.User_KEY),user);
+                        FriendsFragment friendsFragment = new FriendsFragment();
+                        Bundle b = new Bundle();
+                        b.putParcelable(getString(R.string.User_KEY), user);
                         friendsFragment.setArguments(b);
 
-                        ChatListFragment chatListFragment=new ChatListFragment();
-                        Bundle bundle=new Bundle();
-                        bundle.putParcelable(getString(R.string.User_KEY),user);
+                        ChatListFragment chatListFragment = new ChatListFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(getString(R.string.User_KEY), user);
                         chatListFragment.setArguments(bundle);
 
                         adapter.addList(chatListFragment, getString(R.string.Messages_KEY));
@@ -108,7 +101,7 @@ public class RoomsFragment extends Fragment {
                         tabs.setupWithViewPager(pages);
 
                         Picasso.get()
-                                .load(user.getProfilePic())
+                                .load(user.getProfile())
                                 .transform(new CircleTransform())
                                 .into(avatar, new Callback() {
                                     @Override
@@ -129,5 +122,39 @@ public class RoomsFragment extends Fragment {
                     }
                 });
 
+        toolbar.setOnMenuItemClickListener(this::MenuCallBack);
+
+
     }
+
+    private boolean MenuCallBack(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_setting:
+                Timber.tag("menu").d("Setting");
+                ((OpenChatFragment) getContext() ).openFragment(user,new SettingFragment());
+                break;
+            case R.id.menu_logout:
+                Timber.tag("menu").d("logout");
+                LogOut();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void LogOut(){
+
+        new Thread(() -> {
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        FirebaseAuth.getInstance().signOut();
+        getActivity().finishAffinity();
+    }
+
 }

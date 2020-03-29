@@ -1,78 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/layout_margin"
+    android:padding="@dimen/low_margin_padding"
+    android:layout_margin="@dimen/low_margin_padding"
+    android:background="@color/background_1"
     tools:context=".Register.Fragment_Register">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        app:layout_constraintHeight_percent="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"
+        />
 
             <ImageView
-                android:layout_width="150dp"
+                android:layout_width="100dp"
                 android:id="@+id/register_img"
-                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="@id/guideline_top"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:scaleType="fitCenter"
                 android:src="@drawable/avatar"
-                android:layout_height="150dp"
+                android:background="@drawable/image_frame"
+                android:layout_height="100dp"
+                android:contentDescription="@string/upload_profile_image_hint"
                 android:layout_gravity="center" />
+
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_margin="@dimen/view_margin"
-                android:layout_height="wrap_content">
+                tools:ignore="MissingConstraints"
+                android:layout_marginTop="@dimen/average_margin_padding"
+                style="@style/text_input_layout"
+                android:id="@+id/register_name_layout"
+                app:layout_constraintTop_toBottomOf="@id/register_img"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
+                    style="@style/text_input"
                     android:id="@+id/register_name_txt"
-                    android:inputType="textEmailAddress"
-                    android:layout_height="wrap_content"
                     android:hint="@string/name" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_margin="@dimen/view_margin"
-                android:layout_height="wrap_content">
+                style="@style/text_input_layout"
+                tools:ignore="MissingConstraints"
+                android:id="@+id/register_email_layout"
+                app:layout_constraintTop_toBottomOf="@id/register_name_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
+                    style="@style/text_input"
                     android:id="@+id/register_email_txt"
-                    android:inputType="textEmailAddress"
-                    android:layout_height="wrap_content"
                     android:hint="@string/email" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_margin="@dimen/view_margin"
+                style="@style/text_input_layout"
+                tools:ignore="MissingConstraints"
                 android:id="@+id/register_password_txt_layout"
-                app:passwordToggleEnabled="true"
-                android:layout_height="wrap_content">
+                app:layout_constraintTop_toBottomOf="@id/register_email_layout"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/text_input"
                     android:id="@+id/register_password_txt"
                     android:inputType="textPassword"
                     android:hint="@string/password" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                style="@style/button"
                 android:id="@+id/btn_register"
+                app:layout_constraintTop_toBottomOf="@id/register_password_txt_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:hint="@string/register"/>
-            <TextView
-                android:id="@+id/txt_have_an_account_log_in"
-                style="@style/clickableText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/view_margin"
-                android:text="@string/have_an_account" />
 
-        </LinearLayout>
+    <TextView
+        android:id="@+id/txt_have_an_account_log_in"
+        style="@style/clickableText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/average_margin_padding"
+        android:gravity="center"
+        android:text="@string/have_an_account" />
 
-</androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/line_view"
+        android:layout_marginEnd="@dimen/high_margin_padding"
+        android:layout_marginStart="@dimen/high_margin_padding"
+        app:layout_constraintTop_toBottomOf="@id/btn_register"
+        app:layout_constraintBottom_toBottomOf="@id/txt_have_an_account_log_in"
+        android:background="@color/line_separator"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

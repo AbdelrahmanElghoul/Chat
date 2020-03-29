@@ -1,18 +1,24 @@
 <resources>
-    <string name="app_name">chat</string>
-
-    <string name="password">Password</string>
+    <string name="app_name">WeTalk</string>
+    <string name="password">password</string>
+    <string name="new_password">new password</string>
+    <string name="current_password">current password</string>
+    <string name="update">update</string>
     <string name="log_in">Log In</string>
     <string name="register">Register</string>
-    <string name="have_an_account">have an account ? Log in</string>
-    <string name="create_new_account">create new account</string>
+    <string name="have_an_account">Already have an account?\n click here to <b><u>Log In</u></b></string>
+    <string name="create_new_account">Create new account</string>
     <string name="password_error_msg">Password should be at least 6 characters</string>
     <string name="wrong_email_format">Invalid Email Format</string>
     <string name="Empty_field_msg">empty field</string>
     <string name="default_Error_msg">something went wrong please try again later</string>
     <string name="logIn_Error_msg">Invalid Email/Password</string>
-
+    <string name="upload_profile_image_hint">click to upload profile image</string>
+    <string name="logo_image_description">app logo</string>
+    <string name="profile_image_description">profile image</string>
     <string name="search">Search by email</string>
+    <string name="save">save</string>
+
     <!-- Firebase RealTime Keys-->
     <string name="User_KEY">user</string>
     <string name="email">email</string>
@@ -48,5 +54,10 @@
     <!--Notification Message-->
     <string name="Notify_FRIEND_REQUEST_msg">sent you friend request</string>
     <string name="Notify_FRIEND_REQUEST_Title">Friend Request</string>
+
+    <!-- menu -->
+    <string name="menu_Setting">Setting</string>
+    <string name="menu_LogOut">logout</string>
+
 
 </resources>

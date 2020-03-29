@@ -13,6 +13,7 @@ import java.util.Map;
 import timber.log.Timber;
 
 public class NotificationService extends FirebaseMessagingService {
+
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);

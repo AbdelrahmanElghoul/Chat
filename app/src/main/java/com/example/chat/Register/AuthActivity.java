@@ -41,7 +41,37 @@ public class AuthActivity extends AppCompatActivity implements NavigateMainFrag,
 
     @Override
     public void LoadFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_mainActivity, fragment).commit();
+        if(getSupportFragmentManager().getBackStackEntryCount()>0){
+            Timber.tag("load").d(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
+            getSupportFragmentManager().popBackStack();
+        }
+        else
+            Timber.tag("load").d("loaded"+getSupportFragmentManager().getBackStackEntryCount());
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frame_mainActivity, fragment)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getSupportFragmentManager().getBackStackEntryCount()>1){
+            Timber.tag("back").d(String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
+            getSupportFragmentManager().popBackStack();
+        }
+        else
+            finishAffinity();
+    }
+
+    @Override
+    public void LogIn() {
+        addToken();
+        Intent intent=new Intent(this, RoomsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+
 
     }
 
@@ -71,11 +101,6 @@ public class AuthActivity extends AppCompatActivity implements NavigateMainFrag,
         });
     }
 
-    @Override
-    public void LogIn() {
-        addToken();
-        Intent intent=new Intent(this, RoomsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+
+
 }

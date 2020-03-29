@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-
     android:id="@+id/chat_list_layout"
+    android:background="@color/background_2"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -12,6 +12,7 @@
         android:scaleType="fitCenter"
         style="@style/profile"
         android:src="@drawable/avatar"
+        android:background="@drawable/round_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -22,7 +23,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/chat_list_name"
         android:maxLines="1"
-        android:layout_margin="@dimen/view_margin"
+        android:text="@string/name"
+        android:layout_margin="@dimen/average_margin_padding"
         app:layout_constraintStart_toEndOf="@id/chat_list_avatar"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -32,8 +34,8 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:gravity="start"
-        android:text="123213123123123eqweqwe12322222222222222221231231"
-        android:layout_margin="@dimen/view_margin"
+        android:text="@string/new_message"
+        android:layout_margin="@dimen/average_margin_padding"
         android:id="@+id/chat_list_message"
         app:layout_constraintStart_toEndOf="@id/chat_list_avatar"
         app:layout_constraintBottom_toBottomOf="parent"

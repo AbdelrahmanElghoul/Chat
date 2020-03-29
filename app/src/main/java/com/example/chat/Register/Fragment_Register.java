@@ -1,5 +1,6 @@
 package com.example.chat.Register;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -110,6 +111,9 @@ public class Fragment_Register extends Fragment {
 
     private void Register(final String Email, final String Password) {
 
+        ProgressDialog progressDialog=ProgressDialog.show(getContext(), "",
+                "creating account. Please wait...", true);
+
         firebaseAuth.createUserWithEmailAndPassword(Email, Password)
                 .addOnSuccessListener(authResult -> {
 
@@ -118,11 +122,13 @@ public class Fragment_Register extends Fragment {
                     UploadProfileImg();
                     openRoomsActivity open = (openRoomsActivity) getContext();
                     open.LogIn();
+
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     Timber.e(e);
                 });
+        progressDialog.dismiss();
 
     }
 
@@ -147,10 +153,14 @@ public class Fragment_Register extends Fragment {
                         filePath.getDownloadUrl()
                                 .addOnSuccessListener(uri ->
                                         profileUserRef.child(getString(R.string.profile_IMG)).setValue(uri.toString())
-                                                .addOnFailureListener(e ->
-                                                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show())
-                                ).addOnFailureListener(e ->
-                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show()));
+                                                .addOnFailureListener(e ->{
+                                                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                                        Timber.e(e);
+                                                })
+                                ).addOnFailureListener(e ->{
+                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                Timber.e(e);
+                                }));
 
     }
 

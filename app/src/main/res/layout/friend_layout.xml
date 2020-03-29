@@ -3,7 +3,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/friends_layout"
-    android:layout_margin="@dimen/view_margin"
+    android:layout_margin="@dimen/average_margin_padding"
 
     >
     <ImageView
@@ -18,7 +18,7 @@
         android:hint="@string/name"
         android:id="@+id/txt_name"
         android:textSize="@dimen/text_size"
-        android:layout_margin="@dimen/view_margin"
+        android:layout_margin="@dimen/average_margin_padding"
         android:layout_weight="1"
         android:layout_gravity="center"/>
 
