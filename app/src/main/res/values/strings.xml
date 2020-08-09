@@ -23,6 +23,7 @@
     <string name="User_KEY">user</string>
     <string name="email">email</string>
     <string name="name">name</string>
+
     <!--User-->
     <string name="Friends_KEY">Friends</string>
     <string name="profile_IMG">profile</string>
@@ -58,6 +59,9 @@
     <!-- menu -->
     <string name="menu_Setting">Setting</string>
     <string name="menu_LogOut">logout</string>
+    <string name="permission_denied">permission denied. cannot do the required action</string>
 
+<string name="image_uploading_success">image uploaded successfully</string>
+<string name="image_uploading_fail">an error occurred while uploading image please try again</string>
 
 </resources>

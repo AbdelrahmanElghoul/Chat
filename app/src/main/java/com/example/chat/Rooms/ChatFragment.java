@@ -17,7 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chat.CircleTransform;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.chat.Friends;
 import com.example.chat.Messages;
 import com.example.chat.Notification.PushNotification;
@@ -32,8 +33,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +48,7 @@ import timber.log.Timber;
 public class ChatFragment extends Fragment {
 
     @BindView(R.id.avatar)
-    ImageView imgAvatar;
+    ImageView imgProfile;
     @BindView(R.id.btn_back)
     ImageButton btnBack;
     @BindView(R.id.txt_app_bar)
@@ -241,21 +240,11 @@ public class ChatFragment extends Fragment {
     }
 
     private void SetUI() {
-        Picasso.get()
+        Glide.with(getContext())
                 .load(friends.getProfile())
-                .transform(new CircleTransform())
-                .into(imgAvatar, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        imgAvatar.setBackgroundResource(R.drawable.avatar);
-                        Timber.e(e);
-                    }
-                });
+                .apply(RequestOptions.circleCropTransform())
+                .error(R.drawable.avatar)
+                .into(imgProfile);
 
         txtAppbar.setText(friends.getName());
         chatRecycler.setHasFixedSize(true);

@@ -23,8 +23,6 @@ import timber.log.Timber;
 
 public class AuthActivity extends AppCompatActivity implements NavigateMainFrag, openRoomsActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +98,4 @@ public class AuthActivity extends AppCompatActivity implements NavigateMainFrag,
             Timber.e(e);
         });
     }
-
-
-
 }

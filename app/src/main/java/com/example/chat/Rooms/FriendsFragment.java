@@ -20,6 +20,7 @@ import com.example.chat.R;
 import com.example.chat.Rooms.Adapters.FriendRequestAdapter;
 import com.example.chat.Rooms.Adapters.FriendsAdapter;
 import com.example.chat.User;
+import com.example.chat.mFirebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -54,12 +55,16 @@ public class FriendsFragment extends Fragment {
     RecyclerView requestsRecyclerView;
 
     private User user;
+
     private List<Friends> requestList;
+    private List<Friends> pendingRequest;
     private List<Friends> friendsList;
+
     private FriendRequestAdapter requestAdapter;
     private FriendsAdapter friendsAdapter;
     private DatabaseReference friendsRef;
     private ChildEventListener friendsChildListener;
+    private mFirebase fb;
 
     @Nullable
     @Override
@@ -70,6 +75,8 @@ public class FriendsFragment extends Fragment {
         user = getArguments().getParcelable(getString(R.string.User_KEY));
         friendsList = new ArrayList<>();
         requestList = new ArrayList<>();
+        pendingRequest=new ArrayList<>();
+        fb=new mFirebase(getContext());
         return v;
     }
 
@@ -78,6 +85,13 @@ public class FriendsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         btn_add.setOnClickListener(v -> AddFriendBtn(txt_Search.getText().toString()));
+
+
+//        for(Friends f:requestList){
+//            if(f.getFriendState().equals(getContext().getString(R.string.pendingRequest))){
+//                pendingRequest.add(f);
+//            }
+//        }
 
         requestAdapter = new FriendRequestAdapter(getContext(), requestList);
         friendsAdapter = new FriendsAdapter(getContext(), friendsList);
@@ -102,45 +116,78 @@ public class FriendsFragment extends Fragment {
                 if (tmp.getFriendState().equals(getString(R.string.friend))) {
                     friendsList.add(tmp);
                     friendsAdapter.notifyDataSetChanged();
+                    Timber.d("added friend");
                 } else if (tmp.getFriendState().equals(getString(R.string.pendingRequest))) {
-                    requestList.add(tmp);
+                    pendingRequest.add(tmp);
                     requestAdapter.notifyDataSetChanged();
+                    Timber.d("added pending");
+                }else if (tmp.getFriendState().equals(getString(R.string.RequestSent))) {
+                    requestList.add(tmp);
+                    //requestAdapter.notifyDataSetChanged();
+                    Timber.d("added sent");
                 }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
                 Timber.d(String.valueOf(dataSnapshot));
                 Timber.d(s);
+                Timber.d("child changed");
+
                 Friends tmp = dataSnapshot.getValue(Friends.class);
                 tmp.setKey(dataSnapshot.getKey());
 
                 if (tmp.getFriendState().equals(getString(R.string.pendingRequest))) {
-                    requestList.add(tmp);
+                    pendingRequest.add(tmp);
                     requestAdapter.notifyDataSetChanged();
+                }
+                else if (tmp.getFriendState().equals(getString(R.string.RequestSent))) {
+                    requestList.add(tmp);
+                    //requestAdapter.notifyDataSetChanged();
                 }
                 else if (tmp.getFriendState().equals(getString(R.string.friend))) {
                     boolean isRequest=false;
+
                     for (int i = 0; i < requestList.size(); i++) {
                         if (requestList.get(i).getKey().equals(tmp.getKey())) {
                             requestList.remove(i);
+                            Timber.d("request removed");
                             isRequest=true;
                             break;
                         }
                     }
+
+                    for (int i = 0; i < pendingRequest.size(); i++) {
+                        if (pendingRequest.get(i).getKey().equals(tmp.getKey())) {
+                            pendingRequest.remove(i);
+                            Timber.d("pending request removed");
+                            isRequest=true;
+                            break;
+                        }
+                    }
+
                     if(isRequest)
                          friendsList.add(tmp);
                     requestAdapter.notifyDataSetChanged();
                     friendsAdapter.notifyDataSetChanged();
                 }
-                else{
+                else{ // removed
                     for (int i = 0; i < requestList.size(); i++) {
                         if (requestList.get(i).getKey().equals(tmp.getKey())) {
                             requestList.remove(i);
-                            requestAdapter.notifyDataSetChanged();
+                            Timber.d("request removed");
                             break;
                         }
                     }
+                    for (int i = 0; i < pendingRequest.size(); i++) {
+                        if (pendingRequest.get(i).getKey().equals(tmp.getKey())) {
+                            pendingRequest.remove(i);
+                            Timber.d("pending removed");
+                            break;
+                        }
+                    }
+                    requestAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -168,7 +215,6 @@ public class FriendsFragment extends Fragment {
                 .child(getString(R.string.Friends_KEY));
 
         friendsRef.addChildEventListener(friendsChildListener);
-
     }
 
     private void AddFriendBtn(String Email) {
@@ -179,23 +225,18 @@ public class FriendsFragment extends Fragment {
                 .getInstanceId()
                 .addOnSuccessListener(instanceIdResult -> Timber.d(instanceIdResult.getToken()));
 
-        if (Email.isEmpty() || Email.equals(user.getEmail()))
-            return;
-
-        if (friendsList == null || friendsList.size() == 0)
-            GetUserID(Email);
+        boolean isRequest=SearchInRequests(Email);
+        Timber.d(String.valueOf(requestList.size()));
+        if (Email.isEmpty() || Email.equals(user.getEmail()))  return;
+        else if(isRequest) Toast.makeText(getContext(), getContext().getString(R.string.pendingRequest), Toast.LENGTH_SHORT).show();
+        else if (friendsList == null || friendsList.size() == 0)  GetUserID(Email);
         else {
             boolean found = false;
             for (Friends friends : friendsList) {
                 if (friends.getEmail().equals(Email)) {
                     if (getString(R.string.friend).equals(friends.getFriendState())) {
                         Toast.makeText(getContext(), getString(R.string.MSG_isFriend), Toast.LENGTH_SHORT).show();
-                    } else if (getString(R.string.pendingRequest).equals(friends.getFriendState())) {
-                        Toast.makeText(getContext(), getString(R.string.MSG_pendingRequest), Toast.LENGTH_SHORT).show();
-
-                    } else if (getString(R.string.RequestSent).equals(friends.getFriendState())) {
-                        Toast.makeText(getContext(), getString(R.string.MSG_Request_Sent), Toast.LENGTH_SHORT).show();
-                    } else {
+                    }else {
                         AddFriendReceiver(user, friends);
                         AddFriendSender(friends);
                     }
@@ -209,6 +250,26 @@ public class FriendsFragment extends Fragment {
         }
 
         txt_Search.getText().clear();
+    }
+
+    private boolean SearchInRequests(String Email) {
+        for(int i=0;i<requestList.size();i++){
+            if(requestList.get(i).getEmail().equals(Email)){
+                Timber.d(requestList.get(i).getFriendState());
+                 if (getString(R.string.pendingRequest).equals(requestList.get(i).getFriendState())) {
+                    Toast.makeText(getContext(), getString(R.string.MSG_pendingRequest), Toast.LENGTH_SHORT).show();
+                    return true;
+                 }else{
+                     fb.Request(requestList.get(i).getKey(), FirebaseAuth.getInstance().getUid(), getContext().getString(R.string.friend));
+                     fb.Request(FirebaseAuth.getInstance().getUid(), requestList.get(i).getKey(), getContext().getString(R.string.friend));
+                     friendsList.add(requestList.get(i));
+                     requestList.remove(i);
+                     Timber.d("request removed");
+                     return true;
+                 }
+            }
+        }
+        return false;
     }
 
     private void GetUserID(String Email) {

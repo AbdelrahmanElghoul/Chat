@@ -7,35 +7,31 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chat.CircleTransform;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.chat.Friends;
 import com.example.chat.R;
+import com.example.chat.mFirebase;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.FriendRequestVH> {
 
     private Context context;
     private List<Friends> requestList;
-
+    mFirebase fb;
     public FriendRequestAdapter(Context context, List<Friends> requestList) {
         this.context = context;
         this.requestList = requestList;
+        this.fb=new mFirebase(context);
     }
 
     @NonNull
@@ -47,47 +43,24 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     @Override
     public void onBindViewHolder(@NonNull FriendRequestVH holder, int position) {
-        Picasso.get().load(requestList.get(position).getProfile())
+        Glide.with(context)
+                .load(requestList.get(position).getProfile())
+                .apply(RequestOptions.circleCropTransform())
                 .error(R.drawable.avatar)
-                .transform(new CircleTransform())
-                .into(holder.friend_avatar, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                        Timber.e(e);
-                    }
-                });
+                .into(holder.imgFriendProfile);
 
         holder.friend_name.setText(requestList.get(position).getName());
 
         holder.accept_request.setOnClickListener(v -> {
-            Request(requestList.get(position).getKey(), FirebaseAuth.getInstance().getUid(), context.getString(R.string.friend));
-            Request(FirebaseAuth.getInstance().getUid(), requestList.get(position).getKey(), context.getString(R.string.friend));
+
+            fb.Request(requestList.get(position).getKey(), FirebaseAuth.getInstance().getUid(), context.getString(R.string.friend));
+            fb.Request(FirebaseAuth.getInstance().getUid(), requestList.get(position).getKey(), context.getString(R.string.friend));
         });
 
         holder.cancel_request.setOnClickListener(v -> {
-            Request(requestList.get(position).getKey(), FirebaseAuth.getInstance().getUid(), context.getString(R.string.removed_Friend));
-            Request(FirebaseAuth.getInstance().getUid(), requestList.get(position).getKey(), context.getString(R.string.removed_Friend));
+            fb.Request(requestList.get(position).getKey(), FirebaseAuth.getInstance().getUid(), context.getString(R.string.removed_Friend));
+            fb.Request(FirebaseAuth.getInstance().getUid(), requestList.get(position).getKey(), context.getString(R.string.removed_Friend));
         });
-    }
-
-    private void Request(String Id1, String Id2, String state) {
-        DatabaseReference userRef = FirebaseDatabase
-                .getInstance()
-                .getReference()
-                .child(context.getString(R.string.User_KEY))
-                .child(Id1)
-                .child(context.getString(R.string.Friends_KEY))
-                .child(Id2);
-        HashMap data = new HashMap();
-        data.put(context.getString(R.string.friendState), state);
-        userRef.updateChildren(data).addOnFailureListener(e ->
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show());
-
     }
 
     @Override
@@ -97,7 +70,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     class FriendRequestVH extends RecyclerView.ViewHolder {
         @BindView(R.id.profile_img)
-        ImageView friend_avatar;
+        ImageView imgFriendProfile;
         @BindView(R.id.txt_name)
         TextView friend_name;
         @BindView(R.id.accept_request)

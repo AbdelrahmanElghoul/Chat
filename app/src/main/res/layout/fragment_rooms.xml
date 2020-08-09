@@ -69,6 +69,8 @@
             app:tabGravity="fill"
             android:background="@color/background_1"
             app:tabMaxWidth="0dp"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/default_menu_text_color"
             android:id="@+id/tab_layout"
             android:layout_height="wrap_content"/>
 

@@ -12,21 +12,21 @@
         android:layout_width="match_parent"
         android:id="@+id/toolbar_container"
         android:layout_height="wrap_content"
+        android:padding="@dimen/low_margin_padding"
         android:background="?colorPrimary">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentInsetStart="5dp"
+            app:theme="@style/ToolbarTheme"
+            app:contentInsetStart="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="?actionBarSize"
             android:layout_gravity="bottom">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_margin="@dimen/average_margin_padding"
                 android:layout_height="?actionBarSize">
 
                 <ImageButton
@@ -50,11 +50,13 @@
                     android:gravity="center_vertical|start"
                     android:id="@+id/txt_app_bar"
                     android:layout_weight="1"
+                    style="@style/AppTheme"
                     android:textSize="@dimen/actionBarTxt"
                     android:text="@string/app_name"
                     android:layout_height="match_parent"/>
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

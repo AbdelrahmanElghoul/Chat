@@ -1,12 +1,16 @@
 package com.example.chat.Rooms.Adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chat.Messages;
@@ -50,10 +54,68 @@ public class ChatSessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof userViewHolder) {
             ((userViewHolder) holder).txtChat.setText(messagesList.get(position).getMessage());
             ((userViewHolder) holder).txtDate.setText(messagesList.get(position).getTimeStamp());
+            ((userViewHolder) holder).layout.setOnClickListener(v -> {
+                ((userViewHolder) holder).txtDate.animate()
+                        .alpha(1.0f)
+                        .setDuration(200)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                ((userViewHolder) holder).txtDate.setVisibility(View.VISIBLE);
+                            }
+                        });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((userViewHolder) holder).txtDate.animate()
+//                                .translationY(((userViewHolder) holder).txtDate.getHeight())
+                                .alpha(0.0f)
+                                .setDuration(200)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        ((userViewHolder) holder).txtDate.setVisibility(View.GONE);
+                                    }
+                                });
+                    }
+                }, 1500);
+            });
         } else {
             ((FriendViewHolder) holder).txtChat.setText(messagesList.get(position).getMessage());
             ((FriendViewHolder) holder).txtDate.setText(messagesList.get(position).getTimeStamp());
+            ((FriendViewHolder) holder).layout.setOnClickListener(v -> {
+                ((FriendViewHolder) holder).txtDate.animate()
+                        .alpha(1.0f)
+                        .setDuration(200)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                ((FriendViewHolder) holder).txtDate.setVisibility(View.VISIBLE);
+                            }
+                        });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((FriendViewHolder) holder).txtDate.animate()
+//                                .translationY(((FriendViewHolder) holder).txtDate.getHeight())
+                                .alpha(0.0f)
+                                .setDuration(200)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        ((FriendViewHolder) holder).txtDate.setVisibility(View.GONE);
+                                    }
+                                });
+                    }
+                }, 1500);
+            });
         }
+
+
     }
 
     @Override
@@ -76,6 +138,8 @@ public class ChatSessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView txtChat;
         @BindView(R.id.txt_date_sender)
         TextView txtDate;
+        @BindView(R.id.layout_sender)
+        ConstraintLayout layout;
         userViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
@@ -88,6 +152,8 @@ public class ChatSessionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView txtChat;
         @BindView(R.id.txt_date_receiver)
         TextView txtDate;
+        @BindView(R.id.layout_receiver)
+        ConstraintLayout layout;
         FriendViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

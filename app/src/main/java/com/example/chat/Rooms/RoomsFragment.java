@@ -15,7 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.chat.CircleTransform;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.chat.R;
 import com.example.chat.Rooms.Adapters.ViewPagerAdapter;
 import com.example.chat.SettingFragment;
@@ -27,8 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -47,7 +46,7 @@ public class RoomsFragment extends Fragment {
     @BindView(R.id.txt_app_bar)
     TextView AppBar;
     @BindView(R.id.avatar)
-    ImageView avatar;
+    ImageView imgProfile;
 
     private User user ;
     @Nullable
@@ -100,20 +99,12 @@ public class RoomsFragment extends Fragment {
                         pages.setAdapter(adapter);
                         tabs.setupWithViewPager(pages);
 
-                        Picasso.get()
+                        Glide.with(getContext())
                                 .load(user.getProfile())
-                                .transform(new CircleTransform())
-                                .into(avatar, new Callback() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onError(Exception e) {
-                                        avatar.setImageResource(R.drawable.avatar);
-                                    }
-                                });
+                                .apply(RequestOptions.circleCropTransform())
+                                .error(R.drawable.avatar)
+                                .into(imgProfile);
+                        Timber.d(user.getProfile());
                     }
 
                     @Override
@@ -121,6 +112,8 @@ public class RoomsFragment extends Fragment {
                         Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
+
+
 
         toolbar.setOnMenuItemClickListener(this::MenuCallBack);
 

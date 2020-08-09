@@ -76,8 +76,6 @@ public class Fragment_LogIn extends Fragment {
         ProgressDialog progressDialog=ProgressDialog.show(getContext(), "",
                 "logging in. Please wait...", true);
         progressDialog.show();
-
-
         firebaseAuth.signInWithEmailAndPassword(Email.getText().toString(), Password.getText().toString())
                 .addOnSuccessListener(authResult -> {
                     openRoomsActivity open = (openRoomsActivity) getContext();
