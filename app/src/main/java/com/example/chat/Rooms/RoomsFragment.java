@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.chat.R;
 import com.example.chat.Rooms.Adapters.ViewPagerAdapter;
-import com.example.chat.SettingFragment;
 import com.example.chat.User;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -123,10 +122,10 @@ public class RoomsFragment extends Fragment {
     private boolean MenuCallBack(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.menu_setting:
-                Timber.tag("menu").d("Setting");
-                ((OpenChatFragment) getContext() ).openFragment(user,new SettingFragment());
-                break;
+//            case R.id.menu_setting:
+//                Timber.tag("menu").d("Setting");
+//                ((OpenChatFragment) getContext() ).openFragment(user,new SettingFragment());
+//                break;
             case R.id.menu_logout:
                 Timber.tag("menu").d("logout");
                 LogOut();

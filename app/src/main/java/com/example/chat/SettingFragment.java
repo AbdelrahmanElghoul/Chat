@@ -97,7 +97,10 @@ public class SettingFragment extends Fragment {
         if(requestCode==EnumContainer.RequestCode.GET_IMAGE_RESULT.Value && resultCode==RESULT_OK && data!=null){
             imgUri=data.getData();
 
-            Glide.with(getContext()).load(imgUri).apply(RequestOptions.circleCropTransform()).error(R.drawable.avatar).into(imgProfile);
+            Glide.with(getContext())
+                    .load(imgUri)
+                    .apply(RequestOptions.circleCropTransform())
+                    .error(R.drawable.avatar).into(imgProfile);
         }
     }
 
